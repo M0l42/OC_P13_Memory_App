@@ -1,0 +1,12 @@
+{% for object in object_list %}
+    {% autoescape off %}
+        <div>
+            <a href="{% url 'memory' deck=object.pk %}">
+                <h3>{{object.name}}</h3></a>
+        </div>
+    {% endautoescape %}
+{% empty %}
+    <div class="col align-self-center m-5">
+        <p>Désolé, vous n'avez pas encore de deck disponnible</p>
+    </div>
+{% endfor %}
