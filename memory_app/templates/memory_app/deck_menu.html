@@ -1,12 +1,77 @@
-{% for object in object_list %}
-    {% autoescape off %}
-        <div>
-            <a href="{% url 'memory' deck=object.pk %}">
-                <h3>{{object.name}}</h3></a>
+{% extends 'memory_app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <header style="height: 50vh; background-image:url('{% static 'img/banner.jpg' %}')">
+        <div class="container h-100">
+            <a href="https://fr.vecteezy.com/vecteur-libre/3d"></a>
+            <div class="row h-100 align-items-center justify-content-center text-center">
+                <div class="col-lg-10 align-self-end">
+                    <h1 class="text-uppercase text-white font-weight-bold">The Memory App</h1>
+                    <hr class="divider my-4" />
+                </div>
+                <div class="col-lg-8 align-self-baseline">
+                </div>
+            </div>
         </div>
-    {% endautoescape %}
-{% empty %}
-    <div class="col align-self-center m-5">
-        <p>Désolé, vous n'avez pas encore de deck disponnible</p>
+    </header>
+
+    <div class="container">
+        <h2 class="text-center">Deck</h2>
+        <div class="row text-center mx-auto">
+            {% for object in deck %}
+                {% autoescape off %}
+                <div class="col">
+                    <div class="maincontainer card">
+                        <div class="thecard">
+                            <div class="thefront card-body">
+                                <a href="{% url 'memory' deck=object.pk %}" class="card-title">
+                                    <h3>{{object.name}}</h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endautoescape %}
+            {% empty %}
+                <div class="col align-self-center m-5">
+                    <p>Désolé, vous n'avez pas encore de deck disponnible</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2 class="text-center">Deck Rapide</h2>
+        <div class="row text-center mx-auto">
+            {% for object in quick_deck %}
+                {% autoescape off %}
+                <div class="col">
+                    <div class="maincontainer card">
+                        <div class="thecard">
+                            <div class="thefront card-body">
+                                <a href="{% url 'quickmode' deck=object.pk %}" class="card-title">
+                                    <h3>{{object.name}}</h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endautoescape %}
+            {% empty %}
+                <div class="col align-self-center m-5">
+                    <p>Désolé, vous n'avez pas encore de deck disponnible</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2 class="text-center">Ajouter un nouveau deck</h2>
+        <div class="maincontainer mx-auto">
+            <div class="thecard">
+                <div class="thefront card-body">
+                    <a href="{% url 'update' %}" class="card-title">
+                        <h3>Add New Deck</h3>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-{% endfor %}
+{% endblock %}

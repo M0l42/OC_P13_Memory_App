@@ -1,0 +1,40 @@
+{% extends 'memory_app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <header style="height: 50vh; background-image:url('{% static 'img/banner.jpg' %}')">
+        <div class="container h-100">
+            <a href="https://fr.vecteezy.com/vecteur-libre/3d"></a>
+            <div class="row h-100 align-items-center justify-content-center text-center">
+                <div class="col-lg-10 align-self-end">
+                    <h1 class="text-uppercase text-white font-weight-bold">The Memory App</h1>
+                    <hr class="divider my-4" />
+                </div>
+                <div class="col-lg-8 align-self-baseline">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="about us">
+            <h2>About us</h2>
+        </div>
+
+        <div id="method">
+            <h2>La méthode</h2>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/3hAJr5jTxC0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <a href="https://amzn.to/2yRCtsD">La Memory Box</a>
+        </div>
+
+        <div id="fabien">
+            <h2>Fabien Olicard</h2>
+        </div>
+
+        <div id="contact">
+            <h2>Nous contacter</h2>
+        </div>
+    </div>
+
+
+{% endblock %}
