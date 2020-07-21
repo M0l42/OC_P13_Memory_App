@@ -5,4 +5,5 @@ import requests
 
 def home_view(requests):
     """ render the home page """
-    return render(requests, 'pure_beurre/home.html', context={'title': 'Home'})
+    return render(requests, 'memory_app/home_page.html', context={'title': 'Home'})
+
