@@ -67,6 +67,22 @@ def deck_menu_view(requests):
     return render(requests, template_name, context=context)
 
 
+def deck_update(requests, *args, **kwargs):
+    template_name = 'memory_app/update_deck.html'
+    context = dict()
+    context['title'] = 'Normal Desk'
+    deck = Deck.objects.get(pk=kwargs['deck'], user=requests.user)
+    context['deck_name'] = deck.name
+    context['deck'] = deck.cards.all()
+    recto = requests.POST.getlist('recto')
+    verso = requests.POST.getlist('verso')
+    for i in range(len(recto)):
+        card = Cards.objects.create(recto=recto[i], verso=verso[i])
+        deck.cards.add(card)
+        CardsState.objects.create(deck=deck, cards=card, rank=1, side=True)
+    return render(requests, template_name, context=context)
+
+
 class CheckMemoryView(View, LoginRequiredMixin):
     template_name = 'memory_app/memory.html'
 

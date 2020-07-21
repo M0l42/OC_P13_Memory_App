@@ -7,3 +7,9 @@ class UploadFileForm(forms.Form):
     file = forms.FileField(required=False)
     quick_mode = forms.BooleanField(required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None)
+
+
+class ContactForm(forms.Form):
+    from_email = forms.EmailField(required=True)
+    subject = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)

@@ -1,0 +1,59 @@
+{% extends 'memory_app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1 class="text-center">{{ deck_name }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Recto</th>
+              <th scope="col">Verso</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for object in deck %}
+            {% autoescape off %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{object.recto}}</td>
+                    <td>{{object.verso}}</td>
+                </tr>
+            {% endautoescape %}
+            {% empty %}
+            <tr>
+                <th scope="col-sm"></th>
+                <td>None</td>
+                <td>None</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group fieldGroup">
+            <div class="input-group">
+                <input type="text" name="recto" class="form-control" placeholder="Enter recto"/>
+                <input type="text" name="verso" class="form-control" placeholder="Enter verso"/>
+                <div class="input-group-addon">
+                    <a href="javascript:void(0)" class="btn btn-success addMore"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" name="submit" class="btn btn-primary" value="SUBMIT"/>
+
+    </form>
+
+    <!-- copy of input fields group -->
+    <div class="form-group fieldGroupCopy" style="display: none;">
+        <div class="input-group">
+            <input type="text" name="recto" class="form-control" placeholder="Enter recto"/>
+            <input type="text" name="verso" class="form-control" placeholder="Enter verso"/>
+            <div class="input-group-addon">
+                <a href="javascript:void(0)" class="btn btn-danger remove"><span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
