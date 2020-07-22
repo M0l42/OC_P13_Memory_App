@@ -36,6 +36,7 @@ class Deck(models.Model):
     created_at = models.DateField(auto_now_add=True)
     favorite = models.BooleanField(verbose_name="favorite", default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None)
+    private = models.BooleanField(verbose_name="private", default=False)
 
     def __str__(self):
         return self.name
