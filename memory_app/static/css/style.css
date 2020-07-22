@@ -1,8 +1,9 @@
 .maincontainer{
     position: relative;
-    width: 320px;
-    height: 200px;
+    width: 280px;
+    height: 180px;
     background: green;
+    border-radius: 20px;
 }
 
 .thecard{
@@ -12,6 +13,7 @@
     transform-style:  preserve-3d;
     transition: all 0.5s ease;
     background: yellow;
+    border-radius: 20px;
 }
 
 .thefront{
@@ -21,6 +23,7 @@
     backface-visibility: hidden;
     background: #ffc728;
     color: #333;
+    border-radius: 20px;
 }
 
 .theback{
@@ -31,6 +34,7 @@
     background: #fafafa;
     color: #333;
     transform: rotateY(180deg);
+    border-radius: 20px;
 }
 
 .thecard_rotate{

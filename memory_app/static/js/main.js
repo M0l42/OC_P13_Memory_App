@@ -87,7 +87,6 @@ $(document).ready(function() {
 
     //add more fields group
     $(".addMore").click(function(){
-        console.log("wesh");
         if($('body').find('.fieldGroup').length < maxGroup){
             var fieldHTML = '<div class="form-group fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
             $('body').find('.fieldGroup:last').after(fieldHTML);

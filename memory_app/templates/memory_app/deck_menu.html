@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <header style="height: 50vh; background-image:url('{% static 'img/banner.jpg' %}')">
+    <header style="height: 50vh; background-image:url('{% static 'img/banner_2.jpg' %}')">
         <div class="container h-100">
             <a href="https://fr.vecteezy.com/vecteur-libre/3d"></a>
             <div class="row h-100 align-items-center justify-content-center text-center">
@@ -16,18 +16,21 @@
         </div>
     </header>
 
-    <div class="container">
+    <div>
         <h2 class="text-center">Deck</h2>
         <div class="row text-center mx-auto">
             {% for object in deck %}
                 {% autoescape off %}
-                <div class="col">
+                <div class="col Deck">
                     <div class="maincontainer card">
                         <div class="thecard">
                             <div class="thefront card-body">
                                 <a href="{% url 'memory' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>
+                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                                    <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -44,13 +47,16 @@
         <div class="row text-center mx-auto">
             {% for object in quick_deck %}
                 {% autoescape off %}
-                <div class="col">
+                <div class="col QuickDeck">
                     <div class="maincontainer card">
                         <div class="thecard">
-                            <div class="thefront card-body">
+                            <div class="thefront card-body" id="{{ object.pk }}">
                                 <a href="{% url 'quickmode' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>
+                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                                    <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -74,4 +80,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}

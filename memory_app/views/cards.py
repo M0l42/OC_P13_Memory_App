@@ -51,12 +51,33 @@ def card_available(deck):
     return new_card, available
 
 
+def deck_copy(deck_id, user):
+    deck = Deck.objects.get(pk=deck_id)
+    copied_deck = Deck.objects.create(user=user, name=deck.name, category=deck.category)
+    quick = False
+    try:
+        QuickModeDeck.objects.get(deck=deck)
+        QuickModeDeck.objects.create(deck=copied_deck)
+        quick = True
+    except ObjectDoesNotExist:
+        pass
+
+    for card in deck.cards.all():
+        copied_deck.cards.add(card)
+        CardsState.objects.create(deck=copied_deck, cards=card, rank=1, side=True)
+    return quick
+
+
 def deck_menu_view(requests):
     template_name = 'memory_app/deck_menu.html'
     context = dict()
     context['title'] = 'Normal Desk'
     context['deck'] = []
     context['quick_deck'] = []
+
+    if requests.POST:
+        deck_copy(requests.POST.get("copy"), requests.user)
+
     for deck in Deck.objects.filter(user=requests.user):
         try:
             QuickModeDeck.objects.get(deck=deck)
@@ -64,6 +85,7 @@ def deck_menu_view(requests):
         except ObjectDoesNotExist:
             context['deck'].append(deck)
             card_available(deck)
+
     return render(requests, template_name, context=context)
 
 
@@ -80,6 +102,7 @@ def deck_update(requests, *args, **kwargs):
         card = Cards.objects.create(recto=recto[i], verso=verso[i])
         deck.cards.add(card)
         CardsState.objects.create(deck=deck, cards=card, rank=1, side=True)
+
     return render(requests, template_name, context=context)
 
 
