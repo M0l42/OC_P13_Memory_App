@@ -19,9 +19,10 @@ class UploadCSVFormView(LoginRequiredMixin, FormView):
         file = form.cleaned_data['file']
         quick_mode = form.cleaned_data['quick_mode']
         category = form.cleaned_data['category']
+        private = form.cleaned_data['private']
         user = self.request.user
 
-        deck = Deck.objects.create(name=name, user=user, category=category)
+        deck = Deck.objects.create(name=name, user=user, category=category, private=private)
         if quick_mode:
             QuickModeDeck.objects.create(deck=deck)
 
