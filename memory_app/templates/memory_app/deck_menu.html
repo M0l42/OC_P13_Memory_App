@@ -31,6 +31,9 @@
                                 <form method="post" enctype="multipart/form-data">{% csrf_token %}
                                     <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
                                 </form>
+                                <a href="{% url 'deck_update' deck=object.pk %}">
+                                    <button name="update" class="btn btn-primary">Update</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -57,6 +60,9 @@
                                 <form method="post" enctype="multipart/form-data">{% csrf_token %}
                                     <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
                                 </form>
+                                <a href="{% url 'deck_update' deck=object.pk %}">
+                                    <button name="update" class="btn btn-primary">Update</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -70,12 +76,24 @@
         </div>
 
         <h2 class="text-center">Ajouter un nouveau deck</h2>
-        <div class="maincontainer mx-auto">
-            <div class="thecard">
-                <div class="thefront card-body">
-                    <a href="{% url 'update' %}" class="card-title">
-                        <h3>Add New Deck</h3>
-                    </a>
+        <div class="row">
+            <div class="maincontainer mx-auto">
+                <div class="thecard">
+                    <div class="thefront card-body">
+                        <a href="{% url 'update' %}" class="card-title">
+                            <h3>Add New Deck</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="maincontainer mx-auto">
+                <div class="thecard">
+                    <div class="thefront card-body">
+                        <a href="{% url 'deck_search' %}" class="card-title">
+                            <h3>Copy from a public deck</h3>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
