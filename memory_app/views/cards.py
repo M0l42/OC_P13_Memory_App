@@ -1,4 +1,4 @@
-from memory_app.models import Cards, CardsState, Deck, QuickModeDeck
+from memory_app.models import Cards, CardsState, Deck, QuickModeDeck, Category
 from django.views import View
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -251,3 +251,34 @@ class MemoryView(CheckMemoryView):
         state.side = not state.side
         state.save()
         return JsonResponse(context, status=200)
+
+
+def deck_search_view(requests, *args, **kwargs):
+    template_name = 'memory_app/deck_search.html'
+    context = dict()
+    context['title'] = 'Normal Desk'
+    context['deck'] = []
+    context['quick_deck'] = []
+    context['categories'] = Category.objects.all()
+
+    if requests.POST:
+        deck_copy(requests.POST.get("copy"), requests.user)
+
+    public_decks = Deck.objects.filter(private=False)
+    try:
+        category = Category.objects.get(slug=kwargs['slug'])
+        public_decks = public_decks.filter(category=category)
+    except KeyError:
+        pass
+    if requests.GET:
+        public_decks = public_decks.filter(name__contains=requests.GET['query'])
+
+    for deck in public_decks:
+        try:
+            QuickModeDeck.objects.get(deck=deck)
+            context['quick_deck'].append(deck)
+        except ObjectDoesNotExist:
+            context['deck'].append(deck)
+            card_available(deck)
+
+    return render(requests, template_name, context=context)

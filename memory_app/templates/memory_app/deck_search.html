@@ -1,0 +1,98 @@
+{% extends 'memory_app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <header style="height: 50vh; background-image:url('{% static 'img/banner_2.jpg' %}')">
+        <div class="container h-100">
+            <a href="https://fr.vecteezy.com/vecteur-libre/3d"></a>
+            <div class="row h-100 align-items-center justify-content-center text-center">
+                <div class="col-lg-10 align-self-end">
+                    <h1 class="text-uppercase text-white font-weight-bold">The Memory App</h1>
+                    <hr class="divider my-4" />
+                </div>
+                <div class="col-lg-8 align-self-baseline">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'deck_search' %}">Categories</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            {% for category in categories %}
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'deck_search_category' category.slug %}">{{ category }}</a>
+                    </li>
+            {% endfor %}
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="get">
+            <input name="query" class="form-control mr-sm-2" id="navbar-input" type="text" placeholder="Rechercher" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+{#            <form method="get">#}
+{#                <input name="query" class="form-control form-control-sm" id="navbar-input" type="text" placeholder="Rechercher">#}
+{#            </form>#}
+
+        <h2 class="text-center">Deck</h2>
+        <div class="row text-center mx-auto">
+            {% for object in deck %}
+                {% autoescape off %}
+                <div class="col Deck">
+                    <div class="maincontainer card">
+                        <div class="thecard">
+                            <div class="thefront card-body">
+                                <a href="{% url 'memory' deck=object.pk %}" class="card-title">
+                                    <h3>{{object.name}}</h3>
+                                </a>
+                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                                    <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endautoescape %}
+            {% empty %}
+                <div class="col align-self-center m-5">
+                    <p>Désolé, vous n'avez pas encore de deck disponnible</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2 class="text-center">Deck Rapide</h2>
+        <div class="row text-center mx-auto">
+            {% for object in quick_deck %}
+                {% autoescape off %}
+                <div class="col QuickDeck">
+                    <div class="maincontainer card">
+                        <div class="thecard">
+                            <div class="thefront card-body" id="{{ object.pk }}">
+                                <a href="{% url 'quickmode' deck=object.pk %}" class="card-title">
+                                    <h3>{{object.name}}</h3>
+                                </a>
+                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                                    <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endautoescape %}
+            {% empty %}
+                <div class="col align-self-center m-5">
+                    <p>Désolé, vous n'avez pas encore de deck disponnible</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
