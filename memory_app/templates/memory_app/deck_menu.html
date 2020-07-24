@@ -24,7 +24,11 @@
                 <div class="col Deck">
                     <div class="maincontainer card">
                         <div class="thecard">
-                            <div class="thefront card-body">
+                            {% if object.image %}
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}')">
+                            {% else %}
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}">
+                            {% endif %}
                                 <a href="{% url 'memory' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>
@@ -33,6 +37,9 @@
                                 </form>
                                 <a href="{% url 'deck_update' deck=object.pk %}">
                                     <button name="update" class="btn btn-primary">Update</button>
+                                </a>
+                                <a href="{% url 'customize-deck' deck=object.pk %}">
+                                    <button name="customize" class="btn btn-primary">Customize</button>
                                 </a>
                             </div>
                         </div>
@@ -53,7 +60,11 @@
                 <div class="col QuickDeck">
                     <div class="maincontainer card">
                         <div class="thecard">
-                            <div class="thefront card-body" id="{{ object.pk }}">
+                            {% if object.image %}
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/{{ object.image}}')">
+                            {% else %}
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}">
+                            {% endif %}
                                 <a href="{% url 'quickmode' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>

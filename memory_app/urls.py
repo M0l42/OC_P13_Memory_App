@@ -1,7 +1,7 @@
 from django.urls import path
 from .views.home import home_view, legal_mentions
 from .views.forms import UploadCSVFormView, contact_view
-from .views.cards import QuickModeView, MemoryView, deck_menu_view, deck_update, deck_search_view
+from .views.cards import QuickModeView, MemoryView, deck_menu_view, deck_update, deck_search_view, customize_deck
 from .views.user import LogInFormView, SignUpFormView, LogOutView, EditAccountFormView
 
 urlpatterns = [
@@ -15,9 +15,10 @@ urlpatterns = [
     path('deck/memory/<int:deck>/', MemoryView.as_view(), name='memory'),
     path('deck/search/', deck_search_view, name='deck_search'),
     path('deck/search/category/<slug>', deck_search_view, name='deck_search_category'),
+    path('deck/customize/<int:deck>/', customize_deck, name='customize-deck'),
 
     path('login/', LogInFormView.as_view(), name='login'),
     path('sign-up/', SignUpFormView.as_view(), name='sign-up'),
     path('log-off/', LogOutView.as_view(), name='log-off'),
-    path('edit-account/', EditAccountFormView.as_view(), name='edit-account'),
+    path('edit-account/<int:deck>/', EditAccountFormView.as_view(), name='edit-account'),
 ]

@@ -1,0 +1,34 @@
+{% extends 'memory_app/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="maincontainer card">
+        <div class="thecard">
+            <div class="thefront card-body">
+                Exemple Text
+            </div>
+        </div>
+    </div>
+
+    <form action="" method="post" class="form-example" onSubmit="return confirm('Etes vous sûr? Si une image a été selectionner, la couleur ne sera pas appliquer.');">{% csrf_token %}
+        <fieldset>
+          <div class="form-example">
+            <label for="colorWell">Couleur :</label>
+            <input type="color" value="#ffc728" id="colorWell" name="color">
+          </div>
+          <div class="form-group">
+            <label for="disabledSelect">Disabled select menu</label>
+            <select id="disabledSelect" class="form-control" name="image">
+                <option value="None">Image...</option>
+                {% for object in image %}
+                    <option class="abcd" value="{{ object.pk }}" id="{{ object.pk }}">{{ object.name }}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="form-example">
+            <input type="submit" value="Customize !">
+          </div>
+        </fieldset>
+    </form>
+{% endblock %}

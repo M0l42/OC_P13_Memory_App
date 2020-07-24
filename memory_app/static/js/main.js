@@ -99,4 +99,39 @@ $(document).ready(function() {
     $("body").on("click",".remove",function(){
         $(this).parents(".fieldGroup").remove();
     });
+
+    $(".form-control").change(function () {
+        $.ajax({
+            url: '',
+            type: 'GET',
+            data: {
+                image: this.value,
+            },
+            success: function(response) {
+                if (response.image){
+                    let image = '../../../static/img/deck/' + response.image;
+                    $(".thefront").css("background-image", "url('" + image + "')");
+                }
+                else {
+                    $(".thefront").css({"background-image":"none"});
+                }
+            }
+        });
+    });
+
+    window.addEventListener("load", startup, false);
 });
+
+function startup() {
+    colorWell = document.querySelector("#colorWell");
+    colorWell.addEventListener("input", updateFirst, false);
+    colorWell.select();
+}
+
+function updateFirst(event) {
+    let p = document.querySelector(".thefront");
+
+    if (p) {
+        p.style.background = event.target.value;
+    }
+}

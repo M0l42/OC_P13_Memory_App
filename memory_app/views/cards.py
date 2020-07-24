@@ -1,4 +1,4 @@
-from memory_app.models import Cards, CardsState, Deck, QuickModeDeck, Category
+from memory_app.models import Cards, CardsState, Deck, QuickModeDeck, Category, DeckImage
 from django.views import View
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from datetime import date, timedelta
+import os
 
 
 def card_available(deck):
@@ -280,5 +281,38 @@ def deck_search_view(requests, *args, **kwargs):
         except ObjectDoesNotExist:
             context['deck'].append(deck)
             card_available(deck)
+
+    return render(requests, template_name, context=context)
+
+
+def customize_deck(requests, *args, **kwargs):
+    template_name = 'memory_app/test.html'
+    context = dict()
+    context['title'] = 'Normal Desk'
+    context['image'] = DeckImage.objects.all()
+
+    if requests.GET:
+        if requests.is_ajax():
+            data = dict()
+            print(requests.GET.get('image'))
+            try:
+                image = DeckImage.objects.get(pk=requests.GET.get('image'))
+                data['image'] = os.path.basename(image.image.name)
+            except ValueError:
+                pass
+        return JsonResponse(data, status=200)
+
+    if requests.POST:
+        deck = Deck.objects.get(pk=kwargs['deck'])
+        color = requests.POST.get("color")
+        image = requests.POST.get("image")
+
+        if image != 'None':
+            deck.image = DeckImage.objects.get(pk=image)
+        elif color:
+            deck.color = color
+            deck.image = None
+
+        deck.save()
 
     return render(requests, template_name, context=context)

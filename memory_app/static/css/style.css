@@ -2,7 +2,6 @@
     position: relative;
     width: 280px;
     height: 180px;
-    background: green;
     border-radius: 20px;
 }
 
@@ -12,7 +11,6 @@
     height: 100%;
     transform-style:  preserve-3d;
     transition: all 0.5s ease;
-    background: yellow;
     border-radius: 20px;
 }
 
@@ -22,6 +20,7 @@
     height: 100%;
     backface-visibility: hidden;
     background: #ffc728;
+    /*background-image: url("../img/card.jpg");*/
     color: #333;
     border-radius: 20px;
 }
@@ -39,4 +38,11 @@
 
 .thecard_rotate{
     transform: rotateY(180deg);
+}
+
+.color-box{
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    float: left;
 }
