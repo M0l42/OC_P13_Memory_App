@@ -20,5 +20,5 @@ urlpatterns = [
     path('login/', LogInFormView.as_view(), name='login'),
     path('sign-up/', SignUpFormView.as_view(), name='sign-up'),
     path('log-off/', LogOutView.as_view(), name='log-off'),
-    path('edit-account/<int:deck>/', EditAccountFormView.as_view(), name='edit-account'),
+    path('edit-account/', EditAccountFormView.as_view(), name='edit-account'),
 ]

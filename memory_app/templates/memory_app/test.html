@@ -19,7 +19,7 @@
           </div>
           <div class="form-group">
             <label for="disabledSelect">Disabled select menu</label>
-            <select id="disabledSelect" class="form-control" name="image">
+            <select id="disabledSelect" class="form-control change-image" name="image">
                 <option value="None">Image...</option>
                 {% for object in image %}
                     <option class="abcd" value="{{ object.pk }}" id="{{ object.pk }}">{{ object.name }}</option>

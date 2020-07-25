@@ -25,8 +25,6 @@ $(document).ready(function() {
                 rotate: false,
             },
             success: function(response) {
-                // $('#seconds').append('<li>' + response.secondes + '</li>');
-                console.log(response.error)
                 if(response.error){
                     $(".thecard").hide()
                     $(".alert-danger").show();
@@ -59,10 +57,9 @@ $(document).ready(function() {
                 form_text: $('#post-text').val(),
             },
             success: function(response) {
-                // $('#seconds').append('<li>' + response.secondes + '</li>');
                 $(".thefront").text(response.recto);
                 $(".theback").text(response.verso);
-                console.log(response.error)
+                console.log(response.error);
                 if (response.success === 200){
                     $(".alert-success").show();
                 }
@@ -100,7 +97,7 @@ $(document).ready(function() {
         $(this).parents(".fieldGroup").remove();
     });
 
-    $(".form-control").change(function () {
+    $(".change-image").change(function () {
         $.ajax({
             url: '',
             type: 'GET',

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+from datetime import date, timedelta
 import os
 
 
@@ -60,7 +61,63 @@ class Deck(models.Model):
         return self.name
 
     def get_image_name(self):
+        print("here")
         return os.path.basename(self.image.image.name)
+
+    def get_card(self):
+        today = date.today()
+        new_card = None
+        for card in CardsState.objects.filter(deck=self):
+            if card.rank == 1:
+                if card.date != today or card.new is True:
+                    new_card = card
+                    break
+            if card.rank == 2:
+                if card.date == today - timedelta(days=2):
+                    new_card = card
+                    break
+            if card.rank == 3:
+                if today.weekday() == 0:
+                    new_card = card
+                    break
+            if card.rank == 4:
+                if today.day == 1:
+                    new_card = card
+                    break
+            if card.rank == 5:
+                if today >= self.created_at.replace(month=self.created_at.month + 3):
+                    new_card = card
+                    break
+            if card.rank == 6:
+                try:
+                    if today >= self.created_at.replace(month=self.created_at.month + 6):
+                        new_card = card
+                        break
+                except ValueError:
+                    if today >= self.created_at.replace(month=self.created_at.month - 6, year=self.created_at.year + 1):
+                        new_card = card
+                        break
+            if card.rank == 7:
+                if today >= self.created_at.replace(year=self.created_at.year + 1):
+                    new_card = card
+                    break
+        return new_card
+
+    def update(self):
+        state = self.get_card()
+        context = dict()
+        try:
+            card = state.cards
+            context['deck'] = self
+            if state.side:
+                context['recto'] = card.recto
+                context['verso'] = card.verso
+            else:
+                context['recto'] = card.verso
+                context['verso'] = card.recto
+        except AttributeError:
+            context['error'] = "No more cards"
+        return context
 
 
 class CardsState(models.Model):
@@ -76,10 +133,24 @@ class CardsState(models.Model):
     new = models.BooleanField(verbose_name="new", default=True)
 
 
-class QuickModeDeck(models.Model):
-    deck = models.ForeignKey(Deck, on_delete=models.CASCADE, default=None)
+class QuickModeDeck(Deck):
     rank = models.IntegerField(
         verbose_name="rank",
         default=1,
         choices=RANK,
     )
+
+    def get_card(self):
+        try:
+            new_card = CardsState.objects.filter(deck=self, rank=self.rank)[0]
+        except IndexError:
+            if self.rank < 6:
+                self.rank += 1
+            else:
+                self.rank = 1
+                for state in CardsState.objects.filter(deck=self, rank=7):
+                    state.rank = 5
+                    state.save()
+            self.save()
+            new_card = self.get_card()
+        return new_card

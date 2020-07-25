@@ -1,4 +1,5 @@
 {% extends 'memory_app/base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="container">
@@ -18,10 +19,19 @@
 
                 <div class="maincontainer card">
                     <div class="thecard">
-                        <div class="thefront card-body">
+                        {% if deck.image %}
+                            <div class="thefront card-body" style="background-image: url('{% get_static_prefix %}img/deck/{{ deck.get_image_name}}')">
+                        {% else %}
+                            <div class="thefront card-body" style="background: {{ deck.color }}">
+                        {% endif %}
                             <div class="card-title text-center">{{ recto }}</div>
                         </div>
-                        <div class="theback card-body">
+
+                        {% if deck.image %}
+                            <div class="theback card-body" style="background-image: url('{% get_static_prefix %}img/deck/{{ deck.get_image_name}}')">
+                        {% else %}
+                            <div class="theback card-body" style="background: {{ deck.color }}">
+                        {% endif %}
                             <div class="card-title text-center">{{ recto }}</div>
                         </div>
                     </div>

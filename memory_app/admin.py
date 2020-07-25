@@ -22,7 +22,7 @@ class DeskAdmin(admin.ModelAdmin):
 
 @admin.register(QuickModeDeck)
 class QuickModeDeskAdmin(admin.ModelAdmin):
-    list_display = ('deck', 'rank')
+    list_display = ('name', 'user', 'created_at', 'favorite', 'category', 'rank')
     search_fields = ('rank', )
 
 

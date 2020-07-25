@@ -15,6 +15,7 @@ class UploadCSVFormView(LoginRequiredMixin, FormView):
     success_url = '/deck/'
 
     def form_valid(self, form):
+        print("here")
         name = form.cleaned_data['title']
         file = form.cleaned_data['file']
         quick_mode = form.cleaned_data['quick_mode']
@@ -22,9 +23,10 @@ class UploadCSVFormView(LoginRequiredMixin, FormView):
         private = form.cleaned_data['private']
         user = self.request.user
 
-        deck = Deck.objects.create(name=name, user=user, category=category, private=private)
         if quick_mode:
-            QuickModeDeck.objects.create(deck=deck)
+            deck = QuickModeDeck.objects.create(name=name, user=user, category=category, private=private)
+        else:
+            deck = Deck.objects.create(name=name, user=user, category=category, private=private)
 
         if file:
             f = TextIOWrapper(file, encoding=self.request.encoding)

@@ -61,7 +61,7 @@
                     <div class="maincontainer card">
                         <div class="thecard">
                             {% if object.image %}
-                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/{{ object.image}}')">
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}')">
                             {% else %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}">
                             {% endif %}
@@ -73,6 +73,9 @@
                                 </form>
                                 <a href="{% url 'deck_update' deck=object.pk %}">
                                     <button name="update" class="btn btn-primary">Update</button>
+                                </a>
+                                <a href="{% url 'customize-deck' deck=object.pk %}">
+                                    <button name="customize" class="btn btn-primary">Customize</button>
                                 </a>
                             </div>
                         </div>
