@@ -4,7 +4,8 @@
 {% block title %} {{ title }} {% endblock title %}
 
 {% block content %}
-    <h1 class="text-center">{{ deck_name }}</h1>
+    <h1 class="text-center py-5">{{ deck_name }}</h1>
+    <div class="card mx-auto p-5 my-3" style="max-width: 32rem;">
 
     <table class="table">
         <thead>
@@ -57,6 +58,7 @@
         <input type="submit" name="submit" class="btn btn-primary" value="SUBMIT"/>
 
     </form>
+    </div>
 
     <!-- copy of input fields group -->
     <div class="form-group fieldGroupCopy" style="display: none;">

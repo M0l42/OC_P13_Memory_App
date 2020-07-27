@@ -5,7 +5,7 @@
 
 {% block content %}
     <h1 class="text-center py-5">{{ title }}</h1>
-    <div class="card mx-auto p-5 my-3" style="width: 32rem;">
+    <div class="card mx-auto p-5 my-3" style="max-width: 32rem;">
         <form method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="form-group">
                 <label for="Title">Titre</label>
