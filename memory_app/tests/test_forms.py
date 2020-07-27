@@ -1,38 +1,42 @@
 from django.test import TestCase
 from django.urls import reverse
-from memory_app.forms.load import UploadFileForm, ContactForm
-from django.core.files.uploadedfile import SimpleUploadedFile
-from memory_app.models import Cards, CardsState, Deck, QuickModeDeck, Category, DeckImage
+from memory_app.models import Cards, CardsState, Deck, Category
 from . import create_testing_user
 
 
-class DeckMenuTestCase(TestCase):
+class DeckCreationTestCase(TestCase):
     def setUp(self):
         create_testing_user()
         category = Category.objects.create(name="test", slug="test")
-        data = {
+        self.form = {
             "title": "test",
-            "category": category
+            "category": category.id,
+            "private": False,
         }
-        self.form = UploadFileForm(data=data)
 
-    def test_deck_menu_page_return_302(self):
-        response = self.client.get(reverse('update'))
+    def test_deck_creation_page_return_302(self):
+        response = self.client.get(reverse('create_desk'))
         self.assertEqual(response.status_code, 302)
 
-    def test_add_cards(self):
+    def test_create_desk(self):
         user = self.client.login(username='testuser', password='12345')
         old_deck = Deck.objects.filter(user=user).count()
-        self.client.post(reverse('update'), self.form)
-        print(Deck.objects.all())
+        self.client.post(reverse('create_desk'), self.form)
         new_deck = Deck.objects.all().count()
         self.assertEqual(new_deck, old_deck + 1)
 
-    def test_form(self):
-        category = Category.objects.create(name="test", slug="test")
-        data = {
-            "title": "test",
-            "category": category
-        }
-        form = UploadFileForm(data=data)
-        self.assertTrue(form.is_valid())
+    def test_add_cards(self):
+        self.form['recto'] = ['aaaa', 'cccc']
+        self.form['verso'] = ['aaaa', 'cccc']
+        self.client.login(username='testuser', password='12345')
+
+        old_cards_count = Cards.objects.all().count()
+        old_cards_state_count = CardsState.objects.all().count()
+
+        self.client.post(reverse('create_desk'), self.form)
+
+        new_cards_count = Cards.objects.all().count()
+        new_cards_state_count = CardsState.objects.all().count()
+
+        self.assertEqual(new_cards_count, old_cards_count + 2)
+        self.assertEqual(new_cards_state_count, old_cards_state_count + 2)

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from memory_app.models import Cards, CardsState, Deck, QuickModeDeck, Category, DeckImage
+from memory_app.models import Cards, CardsState, Deck, QuickDeck, Category, DeckImage
 from . import create_testing_user
 
 from freezegun import freeze_time
@@ -108,7 +108,7 @@ class QuickDeckTestCase(TestCase):
     def setUp(self):
         user = create_testing_user()
         category = Category.objects.create(name="test", slug="test")
-        self.deck = QuickModeDeck.objects.create(name="test", user=user, category=category)
+        self.deck = QuickDeck.objects.create(name="test", user=user, category=category)
         self.card = Cards.objects.create(recto="aaaa", verso="bbbb")
         self.deck.cards.add(self.card)
 

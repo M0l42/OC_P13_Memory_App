@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
-from memory_app.models import Cards, CardsState, Deck, QuickModeDeck, Category, DeckImage
+from memory_app.models import Cards, CardsState, Deck, QuickDeck, Category, DeckImage
 from . import create_testing_user
 
 import os
@@ -13,7 +13,7 @@ class DeckMenuTestCase(TestCase):
         user = create_testing_user()
         category = Category.objects.create(name="test", slug="test")
         self.deck = Deck.objects.create(name="test", user=user, category=category)
-        QuickModeDeck.objects.create(name="test", user=user, category=category)
+        QuickDeck.objects.create(name="test", user=user, category=category)
 
     def test_deck_menu_page_return_302(self):
         response = self.client.get(reverse('deck_menu'))
@@ -24,14 +24,14 @@ class DeckMenuTestCase(TestCase):
         response = self.client.get(reverse('deck_menu'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['deck'], ['<Deck: test>'])
-        self.assertQuerysetEqual(response.context['quick_deck'], ['<QuickModeDeck: test>'])
+        self.assertQuerysetEqual(response.context['quick_deck'], ['<QuickDeck: test>'])
 
     def test_copy_deck(self):
         old_deck = Deck.objects.count()
         self.client.login(username='testuser', password='12345')
-        self.client.post(reverse('deck_menu'), {'copy': self.deck.id})
+        self.client.post(reverse('deck_menu'), {'delete': self.deck.id})
         new_deck = Deck.objects.count()
-        self.assertEqual(new_deck, old_deck + 1)
+        self.assertEqual(new_deck, old_deck - 1)
 
 
 class DeckUpdateTestCase(TestCase):
@@ -70,12 +70,12 @@ class DeckSearchTestCase(TestCase):
         self.deck = Deck.objects.create(name="test", user=user, category=category)
         card = Cards.objects.create(recto="aaaa", verso="bbbb")
         self.deck.cards.add(card)
-        QuickModeDeck.objects.create(name="test", user=user, category=category)
+        QuickDeck.objects.create(name="test", user=user, category=category)
 
         self.other_deck = Deck.objects.create(name="aaaa", user=other_user, category=other_category)
         card = Cards.objects.create(recto="aaaa", verso="bbbb")
         self.other_deck.cards.add(card)
-        QuickModeDeck.objects.create(name="test", user=other_user, category=other_category, private=True)
+        QuickDeck.objects.create(name="test", user=other_user, category=other_category, private=True)
 
     def test_deck_update_page_return_302(self):
         response = self.client.get(reverse('deck_search'))
@@ -86,12 +86,12 @@ class DeckSearchTestCase(TestCase):
         response = self.client.get(reverse('deck_search'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['deck'], ['<Deck: test>', '<Deck: aaaa>'])
-        self.assertQuerysetEqual(response.context['quick_deck'], ['<QuickModeDeck: test>'])
+        self.assertQuerysetEqual(response.context['quick_deck'], ['<QuickDeck: test>'])
 
     def test_copy_deck(self):
         old_deck = Deck.objects.count()
         self.client.login(username='testuser', password='12345')
-        self.client.post(reverse('deck_menu'), {'copy': self.other_deck.id})
+        self.client.post(reverse('deck_search'), {'copy': self.other_deck.id})
         new_deck = Deck.objects.count()
         self.assertEqual(new_deck, old_deck + 1)
 
@@ -135,9 +135,11 @@ class CustomizeDeckTestCase(TestCase):
 
     def test_set_color_deck(self):
         self.client.login(username='testuser', password='12345')
-        self.client.post(reverse('customize-deck', args={self.deck.id}), {'color': "#fefefe", "image": "None"})
+        self.client.post(reverse('customize-deck', args={self.deck.id}), {'color': "#fefefe", 'color_text': "#ffffff",
+                                                                          "image": "None"})
         deck = Deck.objects.get(pk=self.deck.id)
         self.assertEqual("#fefefe", deck.color)
+        self.assertEqual("#ffffff", deck.color_text)
         self.delete_image()
 
 
@@ -210,7 +212,7 @@ class QuickMemoryTestCase(TestCase):
         user = create_testing_user()
         category = Category.objects.create(name="test", slug="test")
 
-        self.deck = QuickModeDeck.objects.create(name="test", user=user, category=category)
+        self.deck = QuickDeck.objects.create(name="test", user=user, category=category)
         card = Cards.objects.create(recto="aaaa", verso="bbbb")
         self.deck.cards.add(card)
         self.state = CardsState.objects.create(deck=self.deck, cards=card, side=True)
@@ -247,6 +249,13 @@ class QuickMemoryTestCase(TestCase):
     def test_deck_post_failure(self):
         self.client.login(username='testuser', password='12345')
         self.client.post(reverse('quickmode', args={self.deck.id}), {'form_text': "cccc"})
+        state = CardsState.objects.get(pk=self.state.id)
+        self.assertNotEqual(state.side, self.state.side)
+        self.assertEqual(state.rank, 2)
+
+    def test_deck_post_incomplete(self):
+        self.client.login(username='testuser', password='12345')
+        self.client.post(reverse('quickmode', args={self.deck.id}), {'form_text': "bb"})
         state = CardsState.objects.get(pk=self.state.id)
         self.assertNotEqual(state.side, self.state.side)
         self.assertEqual(state.rank, 2)
