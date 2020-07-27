@@ -1,67 +1,39 @@
-from memory_app.models import Cards, Deck, CardsState, QuickModeDeck
-from memory_app.forms.load import UploadFileForm, ContactForm
-from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse, HttpResponseRedirect
+from memory_app.models import Cards, Deck, CardsState, QuickDeck, Category
 from django.shortcuts import render, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import FormView
-import csv
-from io import TextIOWrapper
+from django.contrib.auth.decorators import login_required
 
 
-class UploadCSVFormView(LoginRequiredMixin, FormView):
-    form_class = UploadFileForm
-    template_name = 'memory_app/form.html'
-    success_url = '/deck/'
+@login_required
+def create_desk_view(request):
+    template_name = 'memory_app/create_desk_form.html'
+    context = dict()
+    context['title'] = 'Création de Deck'
+    context['category'] = Category.objects.all()
 
-    def form_valid(self, form):
-        print("here")
-        name = form.cleaned_data['title']
-        file = form.cleaned_data['file']
-        quick_mode = form.cleaned_data['quick_mode']
-        category = form.cleaned_data['category']
-        private = form.cleaned_data['private']
-        user = self.request.user
+    if request.POST:
+        quick_mode = False
+        private = False
+
+        name = request.POST.get('title')
+        category = Category.objects.get(pk=request.POST.get('category'))
+        if request.POST.get('private'):
+            private = True
+        if request.POST.get('quickmode'):
+            quick_mode = True
+        user = request.user
 
         if quick_mode:
-            deck = QuickModeDeck.objects.create(name=name, user=user, category=category, private=private)
+            deck = QuickDeck.objects.create(name=name, user=user, category=category, private=private)
         else:
             deck = Deck.objects.create(name=name, user=user, category=category, private=private)
 
-        if file:
-            f = TextIOWrapper(file, encoding=self.request.encoding)
-            reader = csv.reader(f, delimiter=',')
-            for row in reader:
-                card = Cards.objects.create(recto=row[0], verso=row[1])
-                deck.cards.add(card)
-                CardsState.objects.create(deck=deck, cards=card, rank=1, side=True)
+        recto = request.POST.getlist('recto')
+        verso = request.POST.getlist('verso')
 
-        recto = self.request.POST.getlist('recto')
-        verso = self.request.POST.getlist('verso')
         for i in range(len(recto)):
             card = Cards.objects.create(recto=recto[i], verso=verso[i])
             deck.cards.add(card)
             CardsState.objects.create(deck=deck, cards=card, rank=1, side=True)
 
-        return super().form_valid(form)
-
-
-def contact_view(request):
-    if request.method == 'GET':
-        form = ContactForm()
-    else:
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            subject = form.cleaned_data['subject']
-            from_email = form.cleaned_data['from_email']
-            message = form.cleaned_data['message']
-            try:
-                send_mail(subject, message, from_email, ['boukobza.nathan@gmail.com'])
-            except BadHeaderError:
-                return HttpResponse('Invalid header found.')
-            return redirect('success')
-    return render(request, "memory_app/contact_form.html", {'form': form})
-
-
-def success_view(request):
-    return HttpResponse('Success! Thank you for your message.')
+        return redirect('deck_menu')
+    return render(request, template_name, context=context)
