@@ -5,20 +5,9 @@
 {% block title %} {{ title }} {% endblock title %}
 
 {% block content %}
-      <header class="masthead">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-10 align-self-end">
-                        <h1 class="text-uppercase text-white font-weight-bold">Mentions légales</h1>
-                        <hr class="divider my-4" />
-                    </div>
-                    <div class="col-lg-8 align-self-baseline">
-                    </div>
-                </div>
-            </div>
-        </header>
-
   <!-- Mentions légales -->
+    <h1 class="text-center pt-5">Mentions légales</h1>
+    <hr class="divider my-4 pb-3"/>
   <section id="mentions-legales">
       <div class="container">
         <div class="row py-3">
@@ -42,19 +31,19 @@
                 <br />
                 Le Webmaster est  : <strong>Nathan Boukobza</strong><br />
                 Contacter le Webmaster :  <strong><a href="mailto:boukobza.nathan@gmail.com?subject=Contact a partir des mentions lÃ©gales via le site www.bc-ocdapython-pr8.herokuapp.com">boukobza.nathan@gmail.com</a></strong><br />
-                L’hebergeur du site est : <strong>Heroku 415 Mission St., 3rd Floor CA 94105 San Francisco</strong>
+                L’hebergeur du site est : <strong>Digital Ocean</strong>
               </p>
 
               <p><strong>2. Présentation et principe :</strong></p>
 
               <p>
                 Est désigné ci-après : <strong>Utilisateur</strong>, tout internaute se connectant et utilisant le site susnommé :
-               <a href="https://purebeurre-bn.herokuapp.com/">Pure Beurre</a>.
+               <a href={% url "home" %}>The Memory App</a>.
                <br />
-                Le site <strong>Pure Beurre</strong><strong> </strong>regroupe un ensemble de services, dans l'état,  mis à la disposition des utilisateurs.
+                Le site <strong>The Memory App</strong><strong> </strong>regroupe un ensemble de services, dans l'état,  mis à la disposition des utilisateurs.
                 Il est ici précisé que ces derniers doivent rester courtois et faire preuve de bonne foi tant envers les autres utilisateurs qu'envers
-                le webmaster du site https://purebeurre-bn.herokuapp.com/. Le site https://purebeurre-bn.herokuapp.com/ est mis à jour régulièrement par Nathan Boukobza.<br />
-                Il s’efforce de fournir sur le site https://purebeurre-bn.herokuapp.com/ des informations les plus précises possibles
+                le webmaster du site <a href={% url "home" %}>The Memory App</a>. Le site <a href={% url "home" %}>The Memory App</a> est mis à jour régulièrement par Nathan Boukobza.<br />
+                Il s’efforce de fournir sur le site <a href={% url "home" %}>The Memory App</a> des informations les plus précises possibles
                 (sous réserve de modifications apportées depuis leur mise en ligne), mais ne saurait garantir l'exactitude,
                 la complétude et l'actualité des informations diffusées sur son site, qu’elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations.
                 En conséquence, l'utilisateur reconnaît utiliser ces informations données (à titre indicatif, non exhaustives et susceptibles d'évoluer) sous sa responsabilité exclusive.
@@ -64,46 +53,21 @@
 
               <p><strong>3. Accessibilité :</strong><br />
               <br />
-                Le site https://purebeurre-bn.herokuapp.com/ est par principe accessible aux utilisateurs 24/24h, 7/7j, sauf interruption, programmée ou non, pour les besoins
-                de sa maintenance ou en cas de force majeure. En cas d’impossibilité d’accès au service, https://purebeurre-bn.herokuapp.com/ s’engage à faire son maximum
+                Le site <a href={% url "home" %}>The Memory App</a> est par principe accessible aux utilisateurs 24/24h, 7/7j, sauf interruption, programmée ou non, pour les besoins
+                de sa maintenance ou en cas de force majeure. En cas d’impossibilité d’accès au service, <a href={% url "home" %}>The Memory App</a> s’engage à faire son maximum
                 afin de rétablir l’accès au service et s’efforcera alors de communiquer préalablement aux utilisateurs les dates et heures de l’intervention.
-                N’étant soumis qu’à une obligation de moyen, https://purebeurre-bn.herokuapp.com/ ne saurait être tenu pour responsable de tout dommage,
+                N’étant soumis qu’à une obligation de moyen, <a href={% url "home" %}>The Memory App</a> ne saurait être tenu pour responsable de tout dommage,
                 quelle qu’en soit la nature, résultant d’une indisponibilité du service.
               </p>
 
-              <p> </p>
+              <br />
 
               <p><strong>4. Propriété intellectuelle :</strong></p>
 
               <p><br />
-                Boukobza Nathan est propriétaire exclusif de tous les droits de propriété intellectuelle ou détient les droits d’usage sur tous les éléments accessibles sur le site,
-                tant sur la structure que sur les textes, images, graphismes, logo, icônes, sons, logiciels…<br />
-                Toute reproduction totale ou partielle du site https://purebeurre-bn.herokuapp.com/, représentation, modification, publication,
-                adaptation totale ou partielle de l'un quelconque de ces éléments, quel que soit le moyen ou le procédé utilisé, est interdite,
-                non je déconne, faites vous plaisir si vous tombez dessus et lisez jusqu'ici ! Evidémment tout est libre voici
-                les auteurs des différentes ressources libres utilisées en plus pour mener à bien ce projet
+                Le projet est Open-Source.
               </p>
-              <p>
-                Template : Creative de Blackrock Digital LLC &middot; <a
-                    href="https://startbootstrap.com/themes/creative/" title="startboostrap website" target=_blank><img
-                        class="legal-img" src="https://startbootstrap.com/assets/img/icons/apple-touch-icon.png"
-                        alt="Logo startboostrap">
-                    StartBoostrap</a> <br>
-              </p>
-              <p>
-                Images de fond : Olenka Kotyk &middot; <a href="https://unsplash.com/" title="Unsplash website"
-                    target=_blank><img class="legal-img" src="https://unsplash.com/apple-touch-icon.png"
-                        alt="Logo Unsplash"> Unsplash</a> <br>
-              </p>
-              <p>
-                Icône carotte : Fabien Jouin, DE &middot; <a href="https://thenounproject.com/term/carrot/29691/"
-                    title="The Noun Project website" target=_blank>
-                    <img class="legal-img"
-                        src="https://static.production.thenounproject.com/img/favicons/apple-touch-icon.7fb1143e988e.png"
-                        alt="Logo thenounproject"> The Noun Project</a> <br>
-              </p>
-
-              <p><br />
+              <br />
               <strong>5. Liens hypertextes et cookies :</strong><br />
               <br />
                 Le site contient un certain nombre de liens hypertextes vers d’autres sites (partenaires, informations …) mis en place avec
@@ -126,10 +90,10 @@
               </p>
 
               <p>
-                Sur le site Pure Beurre, Boukobza Nathan ne collecte des informations personnelles ( suivant l'article 4 loi n°78-17 du 06 janvier 1978)
+                Sur le site The Memory App, Boukobza Nathan ne collecte des informations personnelles ( suivant l'article 4 loi n°78-17 du 06 janvier 1978)
                 relatives à l'utilisateur que pour le besoin de certains services proposés par le site ...
                 L'utilisateur fournit ces informations en toute connaissance de cause, notamment lorsqu'il procède par lui-même à leur saisie.
-                Il est alors précisé à l'utilisateur du site Pure Beurre l’obligation ou non de fournir ces informations.<br />
+                Il est alors précisé à l'utilisateur du site The Memory App l’obligation ou non de fournir ces informations.<br />
                 Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés,
                 tout utilisateur dispose d’un droit d’accès, de rectification, de suppression et d’opposition aux données personnelles le concernant.
                 Pour l’exercer, adressez votre demande à ... par email :
@@ -139,11 +103,11 @@
               </p>
 
               <p>
-                Aucune information personnelle de l'utilisateur du site Pure Beurre n'est publiée à l'insu de l'utilisateur, échangée, transférée,
-                cédée ou vendue sur un support quelconque à des tiers. Seule l'hypothèse du rachat du site Pure Beurre et de ses droits
+                Aucune information personnelle de l'utilisateur du site The Memory App n'est publiée à l'insu de l'utilisateur, échangée, transférée,
+                cédée ou vendue sur un support quelconque à des tiers. Seule l'hypothèse du rachat du site The Memory App et de ses droits
                 autorise Boukobza Nathan à transmettre les dites informations à l'éventuel acquéreur qui serait à son tour tenu à la même obligation de conservation
-                et de modification des données vis à vis de l'utilisateur du site Pure Beurre<br />
-                Le site est en conformité avec le RGPD voir notre politique RGPD  purebeurre-bn.herokuapp.com/mentions-legales.
+                et de modification des données vis à vis de l'utilisateur du site The Memory App<br />
+                Le site est en conformité avec le RGPD <a href={% url "legal-mention" %}>voir notre politique RGPD</a>.
               </p>
 
               <p>

@@ -1,0 +1,55 @@
+{% extends 'memory_app/base.html' %}
+{% load static %}
+
+{% block title %} {{ title }} {% endblock title %}
+
+{% block content %}
+    <h1 class="text-center py-5">{{ title }}</h1>
+    <div class="card mx-auto p-5 my-3" style="width: 32rem;">
+        <form method="post" enctype="multipart/form-data">{% csrf_token %}
+            <div class="form-group">
+                <label for="Title">Titre</label>
+                <input type="text" class="form-control" name="title">
+            </div>
+            <div class="form-group">
+                <label for="Category">Example select</label>
+                <select class="form-control" id="Category" name="category">
+                    {% for object in category %}
+                        <option value="{{ object.pk }}" id="{{ object.pk }}">{{ object.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="quickmode" name="quickmode">
+                <label class="form-check-label" for="quickmode">Quick Mode</label>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="private" name="private">
+                <label class="form-check-label" for="private">Private</label>
+            </div>
+            <div class="form-group fieldGroup">
+                <div class="input-group">
+                    <input type="text" name="recto" class="form-control" placeholder="Enter recto"/>
+                    <input type="text" name="verso" class="form-control" placeholder="Enter verso"/>
+                    <div class="input-group-addon">
+                        <a href="javascript:void(0)" class="btn btn-success addMore"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" name="submit" class="btn btn-primary" value="SUBMIT"/>
+
+        </form>
+    </div>
+
+<!-- copy of input fields group -->
+<div class="form-group fieldGroupCopy" style="display: none;">
+    <div class="input-group">
+        <input type="text" name="recto" class="form-control" placeholder="Enter recto"/>
+        <input type="text" name="verso" class="form-control" placeholder="Enter verso"/>
+        <div class="input-group-addon">
+            <a href="javascript:void(0)" class="btn btn-danger remove"><span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

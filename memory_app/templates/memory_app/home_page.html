@@ -1,74 +1,71 @@
 {% extends 'memory_app/base.html' %}
 {% load static %}
 
+{% block title %} {{ title }} {% endblock title %}
+
 {% block content %}
-    <header style="height: 50vh; background-image:url('{% static 'img/banner_2.jpg' %}')">
-        <div class="container h-100">
-            <a href="https://fr.vecteezy.com/vecteur-libre/3d"></a>
-            <div class="row h-100 align-items-center justify-content-center text-center">
-                <div class="col-lg-10 align-self-end">
-                    <h1 class="text-uppercase text-white font-weight-bold">The Memory App</h1>
-                    <hr class="divider my-4" />
-                </div>
-                <div class="col-lg-8 align-self-baseline">
-                </div>
-            </div>
-        </div>
-    </header>
+        <h2 class="text-center pt-5">A propos</h2>
+    <hr class="divider my-4 pb-3"/>
+        <section id="about us" class="row">
+            <div class="col">
+{#                Jeune développeur et fan du contenu de Fabien Olicard, j'ai décidé de réadapté la Mémory Box en version#}
+{#                application web pour mon projet final de ma formation chez OpenClassroom.#}
+{#                Etant curieux d'apprendre de nouvelle chose tout les jours, notamment de nouvelle langues, cette application#}
+{#                est faite pour permettre à tout ce qui veulent d'apprendre de nouvelles informations.#}
 
-    <div class="container">
-        <section id="about us">
-            <h2>About the project</h2>
-            <div>
-                Jeune développeur et fan du contenu de Fabien Olicard, j'ai décidé de réadapté la Mémory Box en version
-                application web pour mon projet final de ma formation chez OpenClassroom.
-                Etant curieux d'apprendre de nouvelle chose tout les jours, notamment de nouvelle langues, cette application
-                est faite pour permettre à tout ce qui veulent d'apprendre de nouvelles informations.
+                <p>L'application est basé sur un système de flashcards qui sont des fiches de révisions simplifié avec, pour chacune, sa question et sa réponse, optimisées pour le fonctionnement du cerveau.</p>
+                <p>La méthodologie est très fortement inspiré de celle de Fabien Olicard afin de permettre un apprentissage dans les sens, ce qui signifie par exemple qu'on n'apprends pas du Français à l'Anglais, mais du Français à l'Anglais ET de l'Anglais au Français.</p>
+                <p>Créer vos propres Deck de Flashcards et commencez dès maintenant à apprendre d'avantage !</p>
+            </div>
+            <div class="col">
+                <p class="text-center"><img src="{% static "img/logo_resized.png" %}" class="center-block"></p>
             </div>
         </section>
 
-        <section id="method">
-            <h2>La méthode</h2>
-            <div>
-                Les flashcards, c'est quoi ?
 
-                Ce sont de petites fiches de révisions simplifiées avec, pour chacune, sa question et sa réponse, optimisées pour le fonctionnement du cerveau.
-                Associées aux méthodes d'apprentissage de la Memory box, elles vous aideront à mémoriser rapidement, facilement et de manière ludique toutes les informations que vous avez toujours voulu retenir !
-            </div>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/3hAJr5jTxC0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <a href="https://amzn.to/2yRCtsD">La Memory Box</a>
-        </section>
-
-        <section id="fabien">
-            <h2>Fabien Olicard</h2>
-            <div>
-                Curieux de tout, Fabien a toujours aimé comprendre les choses, les idées et les gens. Il se produit sur scène avec son 3ème spectacle mélangeant humour et mentalisme, réalise régulièrement des vidéos sur Youtube et transmet ses astuces de mentaliste dans ses différents livres.
-                Captivant, pédagogue, vif et drôle, il aime surprendre et transmettre sa passion avec humour.
+        <h2 class="text-center pt-5">La méthodologie</h2>
+    <hr class="divider my-4 pb-3"/>
+        <section id="method" class="row">
+            <iframe class="col" width="560" height="315" src="https://www.youtube.com/embed/3hAJr5jTxC0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="col">
+                <p>Les flashcards, c'est quoi ?</p>
+                <p>Ce sont de petites fiches de révisions simplifiées avec, pour chacune, sa question et sa réponse, optimisées pour le fonctionnement du cerveau.</p>
+                <p>Associées aux méthodes d'apprentissage de la Memory box et de la Memory App, elles vous aideront à mémoriser rapidement, facilement et de manière ludique toutes les informations que vous avez toujours voulu retenir !</p>
             </div>
         </section>
 
-        <section class="page-section" id="contact">
+
+        <h2 class="text-center pt-5">Fabien Olicard</h2>
+        <hr class="divider my-4 pb-3"/>
+        <section id="fabien" class="row">
+            <div class="col">
+                <p>Curieux de tout, Fabien a toujours aimé comprendre les choses, les idées et les gens.</p>
+                <p>Il se produit sur scène avec son 3ème spectacle mélangeant humour et mentalisme, réalise régulièrement des vidéos sur Youtube et transmet ses astuces de mentaliste dans ses différents livres.</p>
+                <p>Captivant, pédagogue, vif et drôle, il aime surprendre et transmettre sa passion avec humour.</p>
+            </div>
+            <img src="{% static "img/Fabien_Olicard.jpg" %}" class="col">
+        </section>
+
+        <h2 class="text-center pt-5">Contactez-nous !</h2>
+        <hr class="divider my-4 pb-3"/>
+        <section class="page-section pb-5" id="contact">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 text-center">
-                        <h2 class="mt-0">Contactez-nous !</h2>
-                        <hr class="divider my-4" />
                         <p class="mb-5">Si vous avez une question par rapport à l'application</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0">
-                        <i class="fas fa-phone fa-3x mb-3 text-muted"></i>
-                        <div>00 000 000 000</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-forwarded"><polyline points="19 1 23 5 19 9"></polyline><line x1="15" y1="5" x2="23" y2="5"></line><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <div>+33 6 52 46 62 85</div>
                     </div>
                     <div class="col-lg-4 mr-auto text-center">
-                        <i class="fas fa-envelope fa-3x mb-3 text-muted"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                         <a class="d-block" href="mailto:mail@mail.com">boukobza.nathan@gmail.com</a>
                     </div>
                 </div>
             </div>
         </section>
-    </div>
-
 
 {% endblock %}

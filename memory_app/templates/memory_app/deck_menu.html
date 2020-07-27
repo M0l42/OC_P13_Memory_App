@@ -1,28 +1,20 @@
 {% extends 'memory_app/base.html' %}
 {% load static %}
 
-{% block content %}
-    <header style="height: 50vh; background-image:url('{% static 'img/banner_2.jpg' %}')">
-        <div class="container h-100">
-            <a href="https://fr.vecteezy.com/vecteur-libre/3d"></a>
-            <div class="row h-100 align-items-center justify-content-center text-center">
-                <div class="col-lg-10 align-self-end">
-                    <h1 class="text-uppercase text-white font-weight-bold">The Memory App</h1>
-                    <hr class="divider my-4" />
-                </div>
-                <div class="col-lg-8 align-self-baseline">
-                </div>
-            </div>
-        </div>
-    </header>
+{% block title %} {{ title }} {% endblock title %}
 
-    <div>
-        <h2 class="text-center">Deck</h2>
+{% block content %}
+        <h1 class="text-center pt-5">{{ title }}</h1>
+        <h2 class="text-center py-5" id="Deck">Deck</h2>
         <div class="row text-center mx-auto">
             {% for object in deck %}
                 {% autoescape off %}
-                <div class="col Deck">
-                    <div class="maincontainer card">
+                {% if forloop.counter > 9 %}
+                    <div class="col Deck-hidden" style="display: none;">
+                {% else %}
+                    <div class="col Deck">
+                {% endif %}
+                    <div class="maincontainer card mx-auto my-3">
                         <div class="thecard">
                             {% if object.image %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}')">
@@ -32,17 +24,21 @@
                                 <a href="{% url 'memory' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>
-                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
-                                    <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
-                                </form>
-                                <a href="{% url 'deck_update' deck=object.pk %}">
-                                    <button name="update" class="btn btn-primary">Update</button>
-                                </a>
-                                <a href="{% url 'customize-deck' deck=object.pk %}">
-                                    <button name="customize" class="btn btn-primary">Customize</button>
-                                </a>
                             </div>
                         </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <a href="{% url 'deck_update' deck=object.pk %}" class="px-2">
+                            <button name="update" class="btn btn-primary">Update</button>
+                        </a>
+                        <a href="{% url 'customize-deck' deck=object.pk %}" class="px-2">
+                            <button name="customize" class="btn btn-primary">Customize</button>
+                        </a>
+                        <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                            <button class="btn btn-danger btn-sm rounded-0 px-2" name="delete" type="submit" value="{{ object.pk }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 {% endautoescape %}
@@ -52,13 +48,20 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="d-flex justify-content-center pt-3">
+            <button class="btn btn-success btn-lg text-center viewMoreDeck">Voir plus</button>
+        </div>
 
-        <h2 class="text-center">Deck Rapide</h2>
+        <h2 class="text-center py-5" id="QuickDeck">Deck Rapide</h2>
         <div class="row text-center mx-auto">
             {% for object in quick_deck %}
                 {% autoescape off %}
-                <div class="col QuickDeck">
-                    <div class="maincontainer card">
+                {% if forloop.counter > 9 %}
+                    <div class="col QuickDeck-hidden" style="display: none;">
+                {% else %}
+                    <div class="col QuickDeck">
+                {% endif %}
+                    <div class="maincontainer card mx-auto my-3">
                         <div class="thecard">
                             {% if object.image %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}')">
@@ -68,17 +71,21 @@
                                 <a href="{% url 'quickmode' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>
-                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
-                                    <button name="copy" type="submit" class="btn btn-primary" value={{ object.pk }}>Copy</button>
-                                </form>
-                                <a href="{% url 'deck_update' deck=object.pk %}">
-                                    <button name="update" class="btn btn-primary">Update</button>
-                                </a>
-                                <a href="{% url 'customize-deck' deck=object.pk %}">
-                                    <button name="customize" class="btn btn-primary">Customize</button>
-                                </a>
                             </div>
                         </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <a href="{% url 'deck_update' deck=object.pk %}" class="px-2">
+                            <button name="update" class="btn btn-primary">Update</button>
+                        </a>
+                        <a href="{% url 'customize-deck' deck=object.pk %}" class="px-2">
+                            <button name="customize" class="btn btn-primary">Customize</button>
+                        </a>
+                        <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                            <button class="btn btn-danger btn-sm rounded-0 px-2" name="delete" type="submit" value="{{ object.pk }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 {% endautoescape %}
@@ -88,29 +95,29 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="d-flex justify-content-center pt-3">
+            <button class="btn btn-success btn-lg viewMoreQuickDeck">Voir plus</button>
+        </div>
 
-        <h2 class="text-center">Ajouter un nouveau deck</h2>
-        <div class="row">
-            <div class="maincontainer mx-auto">
-                <div class="thecard">
-                    <div class="thefront card-body">
-                        <a href="{% url 'update' %}" class="card-title">
-                            <h3>Add New Deck</h3>
-                        </a>
-                    </div>
+        <h2 class="text-center py-5">Ajouter un nouveau deck</h2>
+        <div class="row text-center pb-5">
+            <div class="col">
+                <div class="add_card mx-auto">
+                    <a href="{% url 'create_desk' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square mt-4"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                    </a>
+                <p>Create</p>
                 </div>
             </div>
 
-            <div class="maincontainer mx-auto">
-                <div class="thecard">
-                    <div class="thefront card-body">
-                        <a href="{% url 'deck_search' %}" class="card-title">
-                            <h3>Copy from a public deck</h3>
-                        </a>
-                    </div>
+            <div class="col">
+                <div class="add_card mx-auto">
+                    <a href="{% url 'deck_search' %}" class="mt-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square mt-4"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                    </a>
+                <p>Copy</p>
                 </div>
             </div>
         </div>
-    </div>
 
 {% endblock %}

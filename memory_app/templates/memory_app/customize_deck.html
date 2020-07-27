@@ -1,21 +1,32 @@
 {% extends 'memory_app/base.html' %}
 {% load static %}
 
-{% block content %}
+{% block title %} {{ title }} {% endblock title %}
 
-    <div class="maincontainer card">
+{% block content %}
+    <h1 class="text-center py-4">Personalisation du Deck</h1>
+
+    <div class="maincontainer card mx-auto mb-5">
         <div class="thecard">
-            <div class="thefront card-body">
-                Exemple Text
+            {% if deck.image %}
+                <div class="thefront card-body" style="background-image: url('{% get_static_prefix %}img/deck/{{ deck.get_image_name}}')">
+            {% else %}
+                <div class="thefront card-body" style="background: {{ deck.color }}">
+            {% endif %}
+            Exemple Text
             </div>
         </div>
     </div>
 
-    <form action="" method="post" class="form-example" onSubmit="return confirm('Etes vous sûr? Si une image a été selectionner, la couleur ne sera pas appliquer.');">{% csrf_token %}
+    <form action="" method="post" class="form-example pb-4" onSubmit="return confirm('Etes vous sûr? Si une image a été selectionner, la couleur ne sera pas appliquer.');">{% csrf_token %}
         <fieldset>
           <div class="form-example">
             <label for="colorWell">Couleur :</label>
-            <input type="color" value="#ffc728" id="colorWell" name="color">
+            <input type="color" value="{{ deck.color }}" id="colorWell" name="color">
+          </div>
+          <div class="form-example">
+            <label for="colorTextWell">Couleur du Texte:</label>
+            <input type="color" value="{{ deck.color_text }}" id="colorTextWell" name="color_text">
           </div>
           <div class="form-group">
             <label for="disabledSelect">Disabled select menu</label>

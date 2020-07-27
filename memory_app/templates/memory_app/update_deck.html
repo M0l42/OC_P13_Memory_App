@@ -1,6 +1,8 @@
 {% extends 'memory_app/base.html' %}
 {% load static %}
 
+{% block title %} {{ title }} {% endblock title %}
+
 {% block content %}
     <h1 class="text-center">{{ deck_name }}</h1>
 
@@ -40,6 +42,16 @@
                     <a href="javascript:void(0)" class="btn btn-success addMore"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
                 </div>
             </div>
+        </div>
+
+
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="favorite" name="favorite">
+            <label class="form-check-label" for="favorite">Favori</label>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="private" name="private">
+            <label class="form-check-label" for="private">Private</label>
         </div>
 
         <input type="submit" name="submit" class="btn btn-primary" value="SUBMIT"/>

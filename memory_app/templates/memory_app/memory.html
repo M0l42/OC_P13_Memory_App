@@ -1,30 +1,32 @@
 {% extends 'memory_app/base.html' %}
 {% load static %}
 
+{% block title %} {{ title }} {% endblock title %}
+
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-6 mx-auto mt-5">
+            <div class="col-6 mx-auto pt-5">
                 {% if error %}
                     <div class="alert alert-danger" role="alert">
                         {{ error }}
                     </div>
                 {% endif %}
-                <div class="alert alert-success" role="alert" style="display: none">
+                <div class="alert alert-success" role="alert" style="visibility: hidden;">
                     Congrats !
                 </div>
-                <div class="alert alert-danger" role="alert" style="display: none">
+                <div class="alert alert-danger" role="alert" style="visibility: hidden;">
                     It's ok, you'll get it next time !
                 </div>
 
-                <div class="maincontainer card">
+                <div class="maincontainer card mx-auto mb-4">
                     <div class="thecard">
                         {% if deck.image %}
                             <div class="thefront card-body" style="background-image: url('{% get_static_prefix %}img/deck/{{ deck.get_image_name}}')">
                         {% else %}
                             <div class="thefront card-body" style="background: {{ deck.color }}">
                         {% endif %}
-                            <div class="card-title text-center">{{ recto }}</div>
+                            <div class="card-title text-center my-5 front-text" style="color: {{ deck.color_text }};">{{ recto }}</div>
                         </div>
 
                         {% if deck.image %}
@@ -32,7 +34,7 @@
                         {% else %}
                             <div class="theback card-body" style="background: {{ deck.color }}">
                         {% endif %}
-                            <div class="card-title text-center">{{ recto }}</div>
+                            <div class="card-title text-center my-5 back-text" style="color: {{ deck.color_text }};">{{ recto }}</div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +44,6 @@
                   <div class="form-group">
                     <input id="post-text" class="form-control" aria-describedby="checkMemory" placeholder="Enter your answer">
                   </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
 
                 <button type="button" id="next" class="btn btn-success btn-lg" style="display: none">next</button>
@@ -51,12 +52,3 @@
     </div>
 
 {% endblock %}
-
-{#<div class="card" style="width: 18rem;">#}
-{#  <img src="..." class="card-img-top" alt="...">#}
-{#  <div class="card-body">#}
-{#    <h5 class="card-title">Card title</h5>#}
-{#    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>#}
-{#    <a href="#" class="btn btn-primary">Go somewhere</a>#}
-{#  </div>#}
-{#</div>#}
