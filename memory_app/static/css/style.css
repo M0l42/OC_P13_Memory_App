@@ -1,3 +1,12 @@
+body {
+    background: #1B808C;
+}
+
+.content{
+    min-height: 50vh;
+    background: #C6E4EC;
+}
+
 .maincontainer{
     position: relative;
     width: 280px;
@@ -19,7 +28,6 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    color: #333;
     border-radius: 20px;
 }
 
@@ -28,7 +36,6 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    color: #333;
     transform: rotateY(180deg);
     border-radius: 20px;
 }
@@ -37,9 +44,61 @@
     transform: rotateY(180deg);
 }
 
+.thecard_next{
+    transform-style: preserve-3d;
+    animation: animate 2.5s linear;
+}
+
+@keyframes animate{
+    0% {
+        transform: perspective(500px) translate3d(0,0,0);
+        opacity: 1;
+        box-shadow: 5px 5px 15px rgba(0,0,0,0);
+    }
+    15% {
+        transform: perspective(500px) translate3d(-50px,-25px,25px);
+        opacity: 1;
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+    }
+    25%, 100% {
+        transform: perspective(500px) translate3d(-600px,-25px,100px);
+        opacity: 0;
+    }
+}
+
+.add_card {
+    position: relative;
+    width: 280px;
+    height: 180px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
 .color-box{
     width: 60px;
     height: 60px;
     margin: 5px;
     float: left;
+}
+
+.banner{
+    min-height: 497px;
+    max-height: 50vh;
+    width: 100%;
+    background-image: url("../img/banner.png");
+}
+
+.navbar-fixed-top {
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0;
+    width: 100%;
+    z-index:99;
+}
+.navbar-fixed-top.scrolled {
+  background-color: white;
+  transition: background-color 200ms linear;
+}
+
+.navbar-fixed-top.scrolled .nav-link {
+  color:#555;
 }

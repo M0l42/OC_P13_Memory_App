@@ -15,6 +15,7 @@ function getCookie(c_name)
  }
 
 $(document).ready(function() {
+    let verso = "";
     $("#next").click(function() {
         $.ajax({
             url: '',
@@ -26,27 +27,27 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if(response.error){
-                    $(".thecard").hide()
-                    $(".alert-danger").show();
+                    $(".thecard").hide();
+                    $(".alert-danger").css("visibility", "visible");
                     $(".alert-danger").text(response.error);
-                    $(".alert-success").hide();
+                    $(".alert-success").css("visibility", "hidden");
                 }
                 else{
-                    $(".thefront").text(response.recto);
-                    $(".theback").text(response.verso);
-                    $(".alert-success").hide();
-                    $(".alert-danger").hide();
+                    $(".front-text").text(response.recto);
+                    $(".alert-success").css("visibility", "hidden");
+                    $(".alert-danger").css("visibility", "hidden");
                 }
             }
         });
         $(".thecard").toggleClass('thecard_rotate');
         $(this).hide();
-        $("#checkMemory").show()
+        $("#checkMemory").val('').show()
+
     });
 
     $("#checkMemory").on('submit',function (event) {
         event.preventDefault();
-        console.log("form submitted!")
+        console.log("form submitted!");
         $.ajaxSetup({
             headers: { "X-CSRFToken": getCookie("csrftoken") }
         });
@@ -57,20 +58,18 @@ $(document).ready(function() {
                 form_text: $('#post-text').val(),
             },
             success: function(response) {
-                $(".thefront").text(response.recto);
-                $(".theback").text(response.verso);
-                console.log(response.error);
+                $(".back-text").text(response.verso);
                 if (response.success === 200){
-                    $(".alert-success").show();
+                    $(".alert-success").css("visibility", "visible");
                 }
                 else if (response.success === 400)
                 {
-                    $(".alert-danger").show();
+                    $(".alert-danger").css("visibility", "visible");
                 }
             }
         });
         $(".thecard").toggleClass('thecard_rotate');
-        $(this).hide();
+        $(this).trigger('reset').hide();
         $("#next").show()
     });
 
@@ -117,6 +116,20 @@ $(document).ready(function() {
     });
 
     window.addEventListener("load", startup, false);
+    window.addEventListener("load", startupText, false);
+
+    $(".viewMoreDeck").click(function(){
+        $(".Deck-hidden").show();
+        window.location.hash = '#Deck';
+        $(".viewMoreDeck").hide()
+    });
+
+    $(".viewMoreQuickDeck").click(function(){
+        $(".QuickDeck-hidden").show();
+        window.location.hash = '#QuickDeck';
+        $(".viewMoreQuickDeck").hide()
+    });
+
 });
 
 function startup() {
@@ -132,3 +145,24 @@ function updateFirst(event) {
         p.style.background = event.target.value;
     }
 }
+
+function startupText() {
+    colorTextWell = document.querySelector("#colorTextWell");
+    colorTextWell.addEventListener("input", updateFirstText, false);
+    colorTextWell.select();
+}
+
+function updateFirstText(event) {
+    let p = document.querySelector(".thefront");
+
+    if (p) {
+        p.style.color = event.target.value;
+    }
+}
+
+$(function () {
+  $(document).scroll(function () {
+	  let $nav = $(".navbar-fixed-top");
+	  $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+	});
+});
