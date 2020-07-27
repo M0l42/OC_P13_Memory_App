@@ -6,6 +6,11 @@
 {% block content %}
     <h1 class="text-center pt-5">{{ title }}</h1>
     <div class="card mx-auto my-3" style="max-width: 32rem;">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
         <form method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="p-5">
                 {{ form.as_p }}
