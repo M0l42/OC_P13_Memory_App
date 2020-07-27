@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cards, Deck, CardsState, QuickModeDeck, Category, DeckImage
+from .models import Cards, Deck, CardsState, QuickDeck, Category, DeckImage
 
 
 @admin.register(Cards)
@@ -20,7 +20,7 @@ class DeskAdmin(admin.ModelAdmin):
     search_fields = ('user', )
 
 
-@admin.register(QuickModeDeck)
+@admin.register(QuickDeck)
 class QuickModeDeskAdmin(admin.ModelAdmin):
     list_display = ('name', 'user', 'created_at', 'favorite', 'category', 'rank')
     search_fields = ('rank', )

@@ -54,6 +54,7 @@ class Deck(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None)
     image = models.ForeignKey(DeckImage, on_delete=models.CASCADE, default=None, blank=True, null=True)
     color = models.CharField(verbose_name='color', max_length=7, blank=True, null=True, default='#ffc728')
+    color_text = models.CharField(verbose_name='color_text', max_length=7, blank=True, null=True, default='#000000')
     private = models.BooleanField(verbose_name="private", default=False)
     favorite = models.BooleanField(verbose_name="favorite", default=False)
 
@@ -61,7 +62,6 @@ class Deck(models.Model):
         return self.name
 
     def get_image_name(self):
-        print("here")
         return os.path.basename(self.image.image.name)
 
     def get_card(self):
@@ -133,7 +133,7 @@ class CardsState(models.Model):
     new = models.BooleanField(verbose_name="new", default=True)
 
 
-class QuickModeDeck(Deck):
+class QuickDeck(Deck):
     rank = models.IntegerField(
         verbose_name="rank",
         default=1,
