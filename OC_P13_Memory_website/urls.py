@@ -1,4 +1,4 @@
-"""OC_P13_Memory_project URL Configuration
+"""OC_P13_Memory_website URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/

@@ -1,5 +1,5 @@
 """
-WSGI config for OC_P13_Memory_project project.
+WSGI config for OC_P13_Memory_website project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OC_P13_Memory_project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OC_P13_Memory_website.settings')
 
 application = get_wsgi_application()
