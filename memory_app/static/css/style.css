@@ -7,12 +7,6 @@ body {
     background: #C6E4EC;
 }
 
-@media screen and (max-width: 800px) {
-    section#about\ us {
-        display: inline-block;
-    }
-}
-
 .maincontainer{
     position: relative;
     width: 280px;
