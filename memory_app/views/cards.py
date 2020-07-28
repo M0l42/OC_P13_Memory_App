@@ -116,6 +116,14 @@ def deck_update(requests, *args, **kwargs):
             deck.favorite = True
             deck.save()
 
+        if requests.POST.get('private'):
+            deck.private = True
+            deck.save()
+
+        if requests.POST.get('title'):
+            deck.name = requests.POST.get('title')
+            deck.save()
+
         recto = requests.POST.getlist('recto')
         verso = requests.POST.getlist('verso')
 

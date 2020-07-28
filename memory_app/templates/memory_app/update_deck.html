@@ -35,6 +35,10 @@
     </table>
 
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group">
+                <label for="Title">Titre</label>
+                <input type="text" class="form-control" name="title">
+        </div>
         <div class="form-group fieldGroup">
             <div class="input-group">
                 <input type="text" name="recto" class="form-control" placeholder="Enter recto"/>
