@@ -73,13 +73,8 @@ $(document).ready(function() {
         $("#next").show()
     });
 
-    let max_fields = 10; //Maximum allowed input fields
-    let wrapper    = $(".wrapper"); //Input fields wrapper
-    let add_button = $(".add_fields"); //Add button class or ID
-    let x = 1; //Initial input field is set to 1
-
     //group add limit
-    var maxGroup = 10;
+    var maxGroup = 50;
 
     //add more fields group
     $(".addMore").click(function(){
