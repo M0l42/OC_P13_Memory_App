@@ -127,6 +127,27 @@ def deck_update(requests, *args, **kwargs):
     return render(requests, template_name, context=context)
 
 
+@login_required
+def show_deck_view(requests, *args, **kwargs):
+    """
+    A Basic page to show all cards of a Deck
+
+    :param requests:
+    :param args:
+    :param kwargs:
+    :return:
+        A rendered page
+    """
+    template_name = 'memory_app/show_deck.html'
+    context = dict()
+    context['title'] = 'Update'
+    deck = Deck.objects.get(pk=kwargs['deck'], user=requests.user)
+    context['deck_name'] = deck.name
+    context['deck'] = deck.cards.all()
+
+    return render(requests, template_name, context=context)
+
+
 class CheckMemoryView(LoginRequiredMixin, View):
     """
     A class of LoginRequiredMixin and View for user to do some revision of their flashcards
@@ -379,3 +400,6 @@ def customize_deck(requests, *args, **kwargs):
         return redirect('deck_menu')
 
     return render(requests, template_name, context=context)
+
+
+

@@ -40,7 +40,7 @@
                             {% else %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}">
                             {% endif %}
-                                <a href="{% url 'memory' deck=object.pk %}" class="card-title">
+                                <a href="{% url 'show_deck' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>
                                 <form method="post" enctype="multipart/form-data">{% csrf_token %}
@@ -77,7 +77,7 @@
                             {% else %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}">
                             {% endif %}
-                                <a href="{% url 'quickmode' deck=object.pk %}" class="card-title">
+                                <a href="{% url 'show_deck' deck=object.pk %}" class="card-title">
                                     <h3>{{object.name}}</h3>
                                 </a>
                                 <form method="post" enctype="multipart/form-data">{% csrf_token %}

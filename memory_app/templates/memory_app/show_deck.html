@@ -1,0 +1,36 @@
+{% extends 'memory_app/base.html' %}
+{% load static %}
+
+{% block title %} {{ title }} {% endblock title %}
+
+{% block content %}
+    <h1 class="text-center py-5">{{ deck_name }}</h1>
+    <div class="card mx-auto p-5 my-3" style="max-width: 32rem;">
+        <table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Recto</th>
+                  <th scope="col">Verso</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for object in deck %}
+                {% autoescape off %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{object.recto}}</td>
+                        <td>{{object.verso}}</td>
+                    </tr>
+                {% endautoescape %}
+                {% empty %}
+                <tr>
+                    <th scope="col-sm"></th>
+                    <td>None</td>
+                    <td>None</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

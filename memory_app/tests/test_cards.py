@@ -60,6 +60,25 @@ class DeckUpdateTestCase(TestCase):
         self.assertEqual(new_card, old_card + 1)
 
 
+class ShowDeckTestCase(TestCase):
+    def setUp(self):
+        user = create_testing_user()
+        category = Category.objects.create(name="test", slug="test")
+        self.deck = Deck.objects.create(name="test", user=user, category=category)
+        self.deck.cards.add(Cards.objects.create(recto="aaaa", verso="bbbb"))
+        self.deck.cards.add(Cards.objects.create(recto="cccc", verso="dddd"))
+
+    def test_deck_update_page_return_302(self):
+        response = self.client.get(reverse('show_deck', args={self.deck.id}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_deck_update_page_return_200(self):
+        self.client.login(username='testuser', password='12345')
+        response = self.client.get(reverse('show_deck', args={self.deck.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(list(response.context['deck']), ['<Cards: aaaa - bbbb>', '<Cards: cccc - dddd>'])
+
+
 class DeckSearchTestCase(TestCase):
     def setUp(self):
         user = create_testing_user()

@@ -1,14 +1,16 @@
 from django.urls import path
 from .views.home import home_view, legal_mentions
 from .views.forms import create_deck_view
-from .views.cards import QuickModeView, MemoryView, deck_menu_view, deck_update, deck_search_view, customize_deck
+from .views.cards import QuickModeView, MemoryView, deck_menu_view, deck_update, \
+    deck_search_view, customize_deck, show_deck_view
 from .views.user import LogInFormView, SignUpFormView, LogOutView, EditAccountFormView
 
 urlpatterns = [
     path('', home_view, name='home'),
     path('legal-mention/', legal_mentions, name='legal-mention'),
     path('deck/', deck_menu_view, name='deck_menu'),
-    path('deck/create/test/', create_deck_view, name='create_desk'),
+    path('deck/create/create/', create_deck_view, name='create_desk'),
+    path('deck/show/<int:deck>', show_deck_view, name='show_deck'),
     path('deck/update/<int:deck>/', deck_update, name='deck_update'),
     path('deck/quick-memory/<int:deck>/', QuickModeView.as_view(), name='quickmode'),
     path('deck/memory/<int:deck>/', MemoryView.as_view(), name='memory'),
