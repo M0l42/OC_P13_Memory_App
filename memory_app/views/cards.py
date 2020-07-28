@@ -149,7 +149,7 @@ def show_deck_view(requests, *args, **kwargs):
     template_name = 'memory_app/show_deck.html'
     context = dict()
     context['title'] = 'Update'
-    deck = Deck.objects.get(pk=kwargs['deck'], user=requests.user)
+    deck = Deck.objects.get(pk=kwargs['deck'])
     context['deck_name'] = deck.name
     context['deck'] = deck.cards.all()
 
