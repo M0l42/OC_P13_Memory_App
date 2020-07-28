@@ -129,7 +129,7 @@ def deck_update(requests, *args, **kwargs):
 
 class CheckMemoryView(LoginRequiredMixin, View):
     """
-    A class of LoginRequiredMixin and FormView to allow users to change some of theirs infos
+    A class of LoginRequiredMixin and View for user to do some revision of their flashcards
 
     ...
 

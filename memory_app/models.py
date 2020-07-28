@@ -57,7 +57,8 @@ class DeckImage(models.Model):
 
 class Deck(models.Model):
     """
-    A class of LoginRequiredMixin and FormView to allow users to change some of theirs infos
+    The main class of the App
+    It represent the Deck of Flashcards
 
     Methods
     -------
