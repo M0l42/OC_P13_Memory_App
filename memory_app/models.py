@@ -5,6 +5,7 @@ from datetime import date, timedelta
 import os
 
 
+# The rank for the CardsState and QuickDeck
 RANK = [
     (1, 1),
     (2, 2),

@@ -129,9 +129,26 @@ def deck_update(requests, *args, **kwargs):
 
 class CheckMemoryView(LoginRequiredMixin, View):
     """
-    This is the parent class to handle the memories view
+    A class of LoginRequiredMixin and FormView to allow users to change some of theirs infos
 
-    It will set all the commun attributes and methodes
+    ...
+
+    Attributes
+    ----------
+    login_url : str
+        The url of the login page
+    redirect_field_name : str
+        what to do
+    template_name : str
+        the name of the template
+
+    Methods
+    -------
+    get:
+        Get the context of the view
+    post:
+        Change all the info the users filled
+
     """
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
