@@ -33,6 +33,14 @@ class Cards(models.Model):
 
 
 def photo_path(instance, filename):
+    """
+    Create a path to save the image.
+
+    :param instance:
+    :param filename:
+    :return:
+        path to the file
+    """
     base_filename, file_extension = os.path.splitext(filename)
     return 'memory_app/static/img/deck/{basename}{file_extension}'.format(
         basename=base_filename, file_extension=file_extension)
@@ -47,6 +55,19 @@ class DeckImage(models.Model):
 
 
 class Deck(models.Model):
+    """
+    A class of LoginRequiredMixin and FormView to allow users to change some of theirs infos
+
+    Methods
+    -------
+    get_image_name:
+        the the image name
+    get_card:
+        Get the right card to use
+    update:
+        Get the card info
+
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     name = models.CharField(verbose_name='name', max_length=200)
     cards = models.ManyToManyField(Cards)
@@ -65,45 +86,70 @@ class Deck(models.Model):
         return os.path.basename(self.image.image.name)
 
     def get_card(self):
+        """
+        Get the first card to use
+        Go to all of the cards of the deck until it found one ready
+
+        :return:
+            state cards
+        """
         today = date.today()
         new_card = None
         for card in CardsState.objects.filter(deck=self):
             if card.rank == 1:
+                # Every day
                 if card.date != today or card.new is True:
                     new_card = card
                     break
             if card.rank == 2:
+                # Every other day
                 if card.date == today - timedelta(days=2):
                     new_card = card
                     break
             if card.rank == 3:
+                # every monday
                 if today.weekday() == 0:
                     new_card = card
                     break
             if card.rank == 4:
+                # every 1 of the month
                 if today.day == 1:
                     new_card = card
                     break
             if card.rank == 5:
-                if today >= self.created_at.replace(month=self.created_at.month + 3):
-                    new_card = card
-                    break
-            if card.rank == 6:
+                # every 3 month
                 try:
-                    if today >= self.created_at.replace(month=self.created_at.month + 6):
+                    if today >= card.date.replace(month=card.date.month + 3):
                         new_card = card
                         break
                 except ValueError:
-                    if today >= self.created_at.replace(month=self.created_at.month - 6, year=self.created_at.year + 1):
+                    if today >= card.date.replace(month=card.date.month - 9, year=card.date.year + 1):
+                        new_card = card
+                        break
+            if card.rank == 6:
+                # every 6 month
+                try:
+                    if today >= card.date.replace(month=card.date.month + 6):
+                        new_card = card
+                        break
+                except ValueError:
+                    if today >=card.date.replace(month=card.date.month - 6, year=self.created_at.year + 1):
                         new_card = card
                         break
             if card.rank == 7:
-                if today >= self.created_at.replace(year=self.created_at.year + 1):
+                # Every year
+                if today >= card.date.replace(year=card.date.year + 1):
                     new_card = card
                     break
         return new_card
 
     def update(self):
+        """
+        Update infos and put it in context
+
+        :return:
+            context
+        """
         state = self.get_card()
         context = dict()
         try:
@@ -134,6 +180,11 @@ class CardsState(models.Model):
 
 
 class QuickDeck(Deck):
+    """
+    Child class of Deck
+    Inherit of every Attribute and method of Deck
+
+    """
     rank = models.IntegerField(
         verbose_name="rank",
         default=1,
@@ -141,6 +192,16 @@ class QuickDeck(Deck):
     )
 
     def get_card(self):
+        """
+        Overwrite Deck's get_card method
+        to follow another logic,
+        Not about time anymore.
+
+        Get a card on the same rank of the deck
+
+        :return:
+            state cards
+        """
         try:
             new_card = CardsState.objects.filter(deck=self, rank=self.rank)[0]
         except IndexError:
@@ -152,5 +213,6 @@ class QuickDeck(Deck):
                     state.rank = 5
                     state.save()
             self.save()
+            # search again
             new_card = self.get_card()
         return new_card

@@ -19,6 +19,10 @@ class DeckTestCase(TestCase):
     def create_card_two_days_ago(self):
         return CardsState.objects.create(deck=self.deck, cards=self.card, side=True, rank=2)
 
+    @freeze_time("2020-07-25")
+    def create_card_right_time(self, rank):
+        return CardsState.objects.create(deck=self.deck, cards=self.card, side=True, rank=rank)
+
     def test_get_card_rank_1_success(self):
         state = CardsState.objects.create(deck=self.deck, cards=self.card, side=True)
         self.assertEqual(self.deck.get_card(), state)
@@ -55,9 +59,9 @@ class DeckTestCase(TestCase):
         state = CardsState.objects.create(deck=self.deck, cards=self.card, side=True, rank=4)
         self.assertNotEqual(self.deck.get_card(), state)
 
-    @freeze_time("2020-12-25")
+    @freeze_time("2020-10-25")
     def test_get_card_rank_5_success(self):
-        state = CardsState.objects.create(deck=self.deck, cards=self.card, side=True, rank=5)
+        state = self.create_card_right_time(5)
         self.assertEqual(self.deck.get_card(), state)
 
     @freeze_time("2020-08-25")
@@ -67,7 +71,7 @@ class DeckTestCase(TestCase):
 
     @freeze_time("2021-01-25")
     def test_get_card_rank_6_success(self):
-        state = CardsState.objects.create(deck=self.deck, cards=self.card, side=True, rank=6)
+        state = self.create_card_right_time(6)
         self.assertEqual(self.deck.get_card(), state)
 
     @freeze_time("2020-12-25")
@@ -77,7 +81,7 @@ class DeckTestCase(TestCase):
 
     @freeze_time("2021-07-25")
     def test_get_card_rank_7_success(self):
-        state = CardsState.objects.create(deck=self.deck, cards=self.card, side=True, rank=7)
+        state = self.create_card_right_time(7)
         self.assertEqual(self.deck.get_card(), state)
 
     @freeze_time("2021-06-25")

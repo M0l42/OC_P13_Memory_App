@@ -173,11 +173,15 @@ class MemoryTestCase(TestCase):
         self.assertEqual(state.rank, 2)
         self.assertEqual(state.new, False)
 
-    @freeze_time("2021-07-25")
-    def test_deck_post_rank_7(self):
+    @freeze_time("2020-07-25")
+    def put_card_rank_7(self):
         self.state.rank = 7
         self.state.save()
+
+    @freeze_time("2021-07-25")
+    def test_deck_post_rank_7(self):
         self.client.login(username='testuser', password='12345')
+        self.put_card_rank_7()
         self.client.post(reverse('memory', args={self.deck.id}), {'form_text': "bbbb"})
         state = CardsState.objects.get(pk=self.state.id)
         self.assertEqual(state.rank, 7)

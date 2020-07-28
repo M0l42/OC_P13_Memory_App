@@ -10,6 +10,14 @@ import os
 
 
 def deck_copy(deck_id, user):
+    """
+    Get infos of a deck and create a new one with it
+
+    :param deck_id:
+    :param user:
+    :return:
+        A boolean to tell of the new deck is a QuickDeck
+    """
     deck = Deck.objects.get(pk=deck_id)
 
     quick = False
@@ -21,13 +29,52 @@ def deck_copy(deck_id, user):
         copied_deck = Deck.objects.create(user=user, name=deck.name, category=deck.category)
 
     for card in deck.cards.all():
+        # Add all deck's cards to the new deck
         copied_deck.cards.add(card)
         CardsState.objects.create(deck=copied_deck, cards=card, rank=1, side=True)
     return quick
 
 
+def get_deck(user, id_deck):
+    """
+    Get the right form of Deck
+
+    :param user:
+    :param id_deck:
+    :return:
+        deck
+    """
+    try:
+        deck = QuickDeck.objects.get(pk=id_deck, user=user)
+    except ObjectDoesNotExist:
+        deck = Deck.objects.get(pk=id_deck, user=user)
+    return deck
+
+
+def sort_deck(context, pack_of_deck):
+    """
+    Sort the deck on two list : quick_deck and deck inside the given context
+
+    :param context:
+    :param pack_of_deck:
+    """
+    for deck in pack_of_deck:
+        try:
+            context['quick_deck'].append(QuickDeck.objects.get(pk=deck))
+        except ObjectDoesNotExist:
+            context['deck'].append(deck)
+
+
 @login_required
 def deck_menu_view(requests):
+    """
+    View of the deck's menu.
+    Show all the Deck and the QuickDeck of the user.
+    The Deck on Favorite will be shown at first.
+    :param requests:
+    :return:
+        A rendered page.
+    """
     template_name = 'memory_app/deck_menu.html'
     context = dict()
     context['title'] = 'Menu'
@@ -35,36 +82,43 @@ def deck_menu_view(requests):
     context['quick_deck'] = []
 
     if requests.POST:
+        # Delete a choosen deck.
         id = requests.POST.get("delete")
-        try:
-            deck = QuickDeck.objects.get(pk=id, user=requests.user)
-        except ObjectDoesNotExist:
-            deck = Deck.objects.get(pk=id, user=requests.user)
+        deck = get_deck(requests.user, id)
         deck.delete()
 
-    for deck in Deck.objects.filter(user=requests.user).order_by('favorite'):
-        try:
-            context['quick_deck'].append(QuickDeck.objects.get(pk=deck))
-        except ObjectDoesNotExist:
-            context['deck'].append(deck)
+    sort_deck(context, Deck.objects.filter(user=requests.user).order_by('favorite'))
 
     return render(requests, template_name, context=context)
 
 
 @login_required
 def deck_update(requests, *args, **kwargs):
+    """
+    Update a choosen Deck.
+    Add new Cards and update some infos of the Deck
+
+    :param requests:
+    :param args:
+    :param kwargs:
+    :return:
+        A rendered page
+    """
     template_name = 'memory_app/update_deck.html'
     context = dict()
     context['title'] = 'Update'
     deck = Deck.objects.get(pk=kwargs['deck'], user=requests.user)
     context['deck_name'] = deck.name
     context['deck'] = deck.cards.all()
+
     if requests.POST:
-        if requests.POST.getlist('favorite'):
+        if requests.POST.get('favorite'):
             deck.favorite = True
             deck.save()
+
         recto = requests.POST.getlist('recto')
         verso = requests.POST.getlist('verso')
+
         for i in range(len(recto)):
             card = Cards.objects.create(recto=recto[i], verso=verso[i])
             deck.cards.add(card)
@@ -74,36 +128,63 @@ def deck_update(requests, *args, **kwargs):
 
 
 class CheckMemoryView(LoginRequiredMixin, View):
+    """
+    This is the parent class to handle the memories view
+
+    It will set all the commun attributes and methodes
+    """
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
     template_name = 'memory_app/memory.html'
 
-    def get(self, request, *args, **kwargs):
-        try:
-            deck = QuickDeck.objects.get(pk=kwargs['deck'], user=self.request.user)
-        except ObjectDoesNotExist:
-            deck = Deck.objects.get(pk=kwargs['deck'], user=self.request.user)
+    def get(self, *args, **kwargs):
+        """
+        Get the Cards to show to the user.
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+            A rendered page or A JsonResponse
+        """
+
+        deck = get_deck(self.request.user, kwargs['deck'])
         context = deck.update()
         context['title'] = 'Révision'
 
-        if request.is_ajax():
-            if request.GET.get('next'):
+        if self.request.is_ajax():
+            if self.request.GET.get('next'):
                 context['deck'] = None
                 return JsonResponse(context, status=200)
-        return render(request, self.template_name, context=context)
+        return render(self.request, self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
         pass
 
 
 class QuickModeView(CheckMemoryView):
-    template_name = 'memory_app/memory.html'
+    """
+    Child class of CheckMemoryView,
+    Will handle the cards for a QuickDeck
+    """
 
     def post(self, request, *args, **kwargs):
+        """
+        Will receive data from a post-text form
+        with the answer of the user of the other side of the card
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+            A JsonResponse with all the data needed
+        """
+
         deck = QuickDeck.objects.get(pk=kwargs['deck'], user=self.request.user)
         state = deck.get_card()
         context = dict()
 
+        # To Check the right side and show the right one to the user
         if state.side:
             checking_side = state.cards.verso
             context['recto'] = state.cards.recto
@@ -115,6 +196,8 @@ class QuickModeView(CheckMemoryView):
 
         answer = request.POST.get('form_text')
         if str(answer).lower() == str(checking_side).lower():
+            # We want all cards to be on Rank 5 when the deck are on rank 4
+            # There's only 7 rank so we need to be sure we don't overlaps
             if deck.rank == 4 or deck.rank == 6:
                 state.rank += 1
             else:
@@ -122,23 +205,41 @@ class QuickModeView(CheckMemoryView):
             context['success'] = 200
         else:
             if deck.rank == 6:
+                # Go back to rank one if the user get it wrong
                 state.rank = 1
             else:
                 state.rank += 1
             context['success'] = 400
+        # Make sure to switch side.
         state.side = not state.side
         state.save()
+
         return JsonResponse(context, status=200)
 
 
 class MemoryView(CheckMemoryView):
-    template_name = 'memory_app/memory.html'
+    """
+    Child class of CheckMemoryView,
+    Will handle the cards for a Deck
+    """
 
     def post(self, request, *args, **kwargs):
+        """
+        Will receive data from a post-text form
+        with the answer of the user of the other side of the card
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+            A JsonResponse with all the data needed
+        """
+
         deck = Deck.objects.get(pk=kwargs['deck'], user=self.request.user)
         card = deck.get_card()
         context = dict()
 
+        # To Check the right side and show the right one to the user
         if card.side:
             checking_side = card.cards.verso
             context['recto'] = card.cards.recto
@@ -151,22 +252,37 @@ class MemoryView(CheckMemoryView):
         answer = request.POST.get('form_text')
 
         if str(answer).lower() == str(checking_side).lower():
+            # All succeded Cards go to the next rank except for the 7th
             if card.rank < 7:
                 card.rank += 1
             context['success'] = 200
         else:
+            # All Failed Cards go the the previous rank except for the 1st rank
             if card.rank != 1:
                 card.rank -= 1
             context['success'] = 400
         if card.new:
+            # To be able to check the cards who's been created the same day
             card.new = False
+        # Make sure to switch side.
         card.side = not card.side
         card.save()
+
         return JsonResponse(context, status=200)
 
 
 @login_required
 def deck_search_view(requests, *args, **kwargs):
+    """
+    Show every public Deck
+    Can be filter by Category or query or both
+
+    :param requests:
+    :param args:
+    :param kwargs:
+    :return:
+        A rendered page
+    """
     template_name = 'memory_app/deck_search.html'
     context = dict()
     context['title'] = 'Recherche'
@@ -178,56 +294,65 @@ def deck_search_view(requests, *args, **kwargs):
         deck_copy(requests.POST.get("copy"), requests.user)
 
     public_decks = Deck.objects.filter(private=False)
+
     try:
+        # Filter by category if the user selected one
         category = Category.objects.get(slug=kwargs['slug'])
         public_decks = public_decks.filter(category=category)
     except KeyError:
         pass
+
     if requests.GET:
+        # Filter by query if the send one
         public_decks = public_decks.filter(name__contains=requests.GET['query'])
 
-    for deck in public_decks:
-        try:
-            context['quick_deck'].append(QuickDeck.objects.get(pk=deck))
-        except ObjectDoesNotExist:
-            context['deck'].append(deck)
+    sort_deck(context, public_decks)
 
     return render(requests, template_name, context=context)
 
 
 @login_required
 def customize_deck(requests, *args, **kwargs):
+    """
+    Handle custimisation of a Deck
+    Add Image or color to it.
+
+    :param requests:
+    :param args:
+    :param kwargs:
+    :return:
+        A rendered page or a JsonResponse or a Redirect
+    """
+
     template_name = 'memory_app/customize_deck.html'
     context = dict()
     context['title'] = 'Personnalisation'
-    try:
-        context['deck'] = QuickDeck.objects.get(pk=kwargs['deck'])
-    except ObjectDoesNotExist:
-        context['deck'] = Deck.objects.get(pk=kwargs['deck'])
+
+    deck = get_deck(requests.user, kwargs['deck'])
+    context['deck'] = deck
+
     context['image'] = DeckImage.objects.all()
 
     if requests.GET:
         if requests.is_ajax():
+            # To show choosen image to the user.
             data = dict()
             try:
                 image = DeckImage.objects.get(pk=requests.GET.get('image'))
                 data['image'] = os.path.basename(image.image.name)
             except ValueError:
                 pass
-        return JsonResponse(data, status=200)
+            return JsonResponse(data, status=200)
 
     if requests.POST:
-        try:
-            deck = QuickDeck.objects.get(pk=kwargs['deck'])
-        except ObjectDoesNotExist:
-            deck = Deck.objects.get(pk=kwargs['deck'])
-
+        # To save changes of the deck infos
         color = requests.POST.get("color")
         image = requests.POST.get("image")
 
         if image != 'None':
             deck.image = DeckImage.objects.get(pk=image)
         elif color:
+            # If a color has been selected, delete the image
             deck.color = color
             deck.image = None
 
