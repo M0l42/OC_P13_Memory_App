@@ -74,6 +74,10 @@ body {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
+.unavailable {
+    filter: grayscale(100%)
+}
+
 .color-box{
     width: 60px;
     height: 60px;

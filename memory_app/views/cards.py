@@ -55,18 +55,37 @@ def get_deck(user, id_deck):
     return deck
 
 
-def sort_deck(context, pack_of_deck):
+def sort_deck(context, pack_of_deck, available=None):
     """
     Sort the deck on two list : quick_deck and deck inside the given context
 
     :param context:
     :param pack_of_deck:
+    :param available
     """
+
+    context['deck'] = []
+    context['unavailable_deck'] = []
+    context['quick_deck'] = []
+    context['unavailable_quick_deck'] = []
     for deck in pack_of_deck:
         try:
-            context['quick_deck'].append(QuickDeck.objects.get(pk=deck))
+            quick_deck = QuickDeck.objects.get(pk=deck)
+            if available:
+                if quick_deck.get_card():
+                    context['quick_deck'].append(quick_deck)
+                else:
+                    context['unavailable_quick_deck'].append(quick_deck)
+            else:
+                context['quick_deck'].append(quick_deck)
         except ObjectDoesNotExist:
-            context['deck'].append(deck)
+            if available:
+                if deck.get_card():
+                    context['deck'].append(deck)
+                else:
+                    context['unavailable_deck'].append(deck)
+            else:
+                context['deck'].append(deck)
 
 
 def create_multiple_cards(deck, requests):
@@ -94,8 +113,6 @@ def deck_menu_view(requests):
     template_name = 'memory_app/deck_menu.html'
     context = dict()
     context['title'] = 'Menu'
-    context['deck'] = []
-    context['quick_deck'] = []
 
     if requests.POST:
         # Delete a choosen deck.
@@ -103,7 +120,7 @@ def deck_menu_view(requests):
         deck = get_deck(requests.user, id)
         deck.delete()
 
-    sort_deck(context, Deck.objects.filter(user=requests.user).order_by('favorite'))
+    sort_deck(context, Deck.objects.filter(user=requests.user).order_by('favorite'), available=True)
 
     return render(requests, template_name, context=context)
 
@@ -342,8 +359,6 @@ def deck_search_view(requests, *args, **kwargs):
     template_name = 'memory_app/deck_search.html'
     context = dict()
     context['title'] = 'Recherche'
-    context['deck'] = []
-    context['quick_deck'] = []
     context['categories'] = Category.objects.all()
 
     if requests.POST:
