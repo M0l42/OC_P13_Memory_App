@@ -27,6 +27,10 @@ def deck_copy(deck_id, user):
         quick = True
     except ObjectDoesNotExist:
         copied_deck = Deck.objects.create(user=user, name=deck.name, category=deck.category)
+    copied_deck.image = deck.image
+    copied_deck.color = deck.color
+    copied_deck.color_text = deck.color_text
+    copied_deck.save()
 
     for card in deck.cards.all():
         # Add all deck's cards to the new deck
@@ -135,8 +139,8 @@ def deck_update(requests, *args, **kwargs):
         if requests.POST.get('title'):
             deck.name = requests.POST.get('title')
             deck.save()
-
         create_multiple_cards(deck, requests)
+        return redirect('deck_menu')
 
     return render(requests, template_name, context=context)
 
