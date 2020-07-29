@@ -204,17 +204,19 @@ class QuickDeck(Deck):
         :return:
             state cards
         """
-        try:
-            new_card = CardsState.objects.filter(deck=self, rank=self.rank)[0]
-        except IndexError:
-            if self.rank < 6:
-                self.rank += 1
-            else:
-                self.rank = 1
-                for state in CardsState.objects.filter(deck=self, rank=7):
-                    state.rank = 5
-                    state.save()
-            self.save()
-            # search again
-            new_card = self.get_card()
-        return new_card
+        if CardsState.objects.filter(deck=self):
+            try:
+                new_card = CardsState.objects.filter(deck=self, rank=self.rank)[0]
+            except IndexError:
+                if self.rank < 6:
+                    self.rank += 1
+                else:
+                    self.rank = 1
+                    for state in CardsState.objects.filter(deck=self, rank=7):
+                        state.rank = 5
+                        state.save()
+                self.save()
+                # search again
+                new_card = self.get_card()
+            return new_card
+        return None

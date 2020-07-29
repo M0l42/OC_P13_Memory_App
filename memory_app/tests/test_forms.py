@@ -40,3 +40,19 @@ class DeckCreationTestCase(TestCase):
 
         self.assertEqual(new_cards_count, old_cards_count + 2)
         self.assertEqual(new_cards_state_count, old_cards_state_count + 2)
+
+    def test_add_empty_cards(self):
+        self.form['recto'] = ['']
+        self.form['verso'] = ['']
+        self.client.login(username='testuser', password='12345')
+
+        old_cards_count = Cards.objects.all().count()
+        old_cards_state_count = CardsState.objects.all().count()
+
+        self.client.post(reverse('create_desk'), self.form)
+
+        new_cards_count = Cards.objects.all().count()
+        new_cards_state_count = CardsState.objects.all().count()
+
+        self.assertEqual(new_cards_count, old_cards_count)
+        self.assertEqual(new_cards_state_count, old_cards_state_count)

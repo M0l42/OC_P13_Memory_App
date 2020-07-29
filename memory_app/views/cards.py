@@ -65,6 +65,18 @@ def sort_deck(context, pack_of_deck):
             context['deck'].append(deck)
 
 
+def create_multiple_cards(deck, requests):
+    # get cards
+    recto = requests.POST.getlist('recto')
+    verso = requests.POST.getlist('verso')
+
+    for i in range(len(recto)):
+        if recto[i]:
+            card = Cards.objects.create(recto=recto[i], verso=verso[i])
+            deck.cards.add(card)
+            CardsState.objects.create(deck=deck, cards=card, rank=1, side=True)
+
+
 @login_required
 def deck_menu_view(requests):
     """
@@ -124,13 +136,7 @@ def deck_update(requests, *args, **kwargs):
             deck.name = requests.POST.get('title')
             deck.save()
 
-        recto = requests.POST.getlist('recto')
-        verso = requests.POST.getlist('verso')
-
-        for i in range(len(recto)):
-            card = Cards.objects.create(recto=recto[i], verso=verso[i])
-            deck.cards.add(card)
-            CardsState.objects.create(deck=deck, cards=card, rank=1, side=True)
+        create_multiple_cards(deck, requests)
 
     return render(requests, template_name, context=context)
 

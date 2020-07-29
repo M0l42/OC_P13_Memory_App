@@ -1,6 +1,7 @@
-from memory_app.models import Cards, Deck, CardsState, QuickDeck, Category
+from memory_app.models import Deck, QuickDeck, Category
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from .cards import create_multiple_cards
 
 
 @login_required
@@ -37,14 +38,6 @@ def create_deck_view(request):
         else:
             deck = Deck.objects.create(name=name, user=user, category=category, private=private)
 
-        # get new cards
-        recto = request.POST.getlist('recto')
-        verso = request.POST.getlist('verso')
-
-        for i in range(len(recto)):
-            if recto[i] != '':
-                card = Cards.objects.create(recto=recto[i], verso=verso[i])
-                deck.cards.add(card)
-                CardsState.objects.create(deck=deck, cards=card, rank=1, side=True)
+        create_multiple_cards(deck, request)
         return redirect('deck_menu')
     return render(request, template_name, context=context)
