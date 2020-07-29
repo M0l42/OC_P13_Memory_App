@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from memory_app.models import Cards, CardsState, Deck, QuickDeck, Category, DeckImage
-from . import create_testing_user
+from . import create_testing_user, create_deck
 
 import os
 from freezegun import freeze_time
@@ -10,10 +10,7 @@ from freezegun import freeze_time
 
 class DeckMenuTestCase(TestCase):
     def setUp(self):
-        user = create_testing_user()
-        category = Category.objects.create(name="test", slug="test")
-        self.deck = Deck.objects.create(name="test", user=user, category=category)
-        QuickDeck.objects.create(name="test", user=user, category=category)
+        self.deck, _ = create_deck()
 
     def test_deck_menu_page_return_302(self):
         response = self.client.get(reverse('deck_menu'))
@@ -36,11 +33,7 @@ class DeckMenuTestCase(TestCase):
 
 class DeckUpdateTestCase(TestCase):
     def setUp(self):
-        user = create_testing_user()
-        category = Category.objects.create(name="test", slug="test")
-        self.deck = Deck.objects.create(name="test", user=user, category=category)
-        card = Cards.objects.create(recto="aaaa", verso="bbbb")
-        self.deck.cards.add(card)
+        self.deck, _ = create_deck()
 
     def test_deck_update_page_return_302(self):
         response = self.client.get(reverse('deck_update', args={self.deck.id}))
@@ -62,10 +55,7 @@ class DeckUpdateTestCase(TestCase):
 
 class ShowDeckTestCase(TestCase):
     def setUp(self):
-        user = create_testing_user()
-        category = Category.objects.create(name="test", slug="test")
-        self.deck = Deck.objects.create(name="test", user=user, category=category)
-        self.deck.cards.add(Cards.objects.create(recto="aaaa", verso="bbbb"))
+        self.deck, _  = create_deck()
         self.deck.cards.add(Cards.objects.create(recto="cccc", verso="dddd"))
 
     def test_deck_update_page_return_302(self):
@@ -81,20 +71,9 @@ class ShowDeckTestCase(TestCase):
 
 class DeckSearchTestCase(TestCase):
     def setUp(self):
-        user = create_testing_user()
-        other_user = create_testing_user(username='other user', password='12345')
-        category = Category.objects.create(name="test", slug="test")
-        other_category = Category.objects.create(name="aaaa", slug="aaaa")
-
-        self.deck = Deck.objects.create(name="test", user=user, category=category)
-        card = Cards.objects.create(recto="aaaa", verso="bbbb")
-        self.deck.cards.add(card)
-        QuickDeck.objects.create(name="test", user=user, category=category)
-
-        self.other_deck = Deck.objects.create(name="aaaa", user=other_user, category=other_category)
-        card = Cards.objects.create(recto="aaaa", verso="bbbb")
-        self.other_deck.cards.add(card)
-        QuickDeck.objects.create(name="test", user=other_user, category=other_category, private=True)
+        self.deck, _ = create_deck()
+        self.other_deck, _ = create_deck(username='other user', password='12345',
+                                         name='other', recto='cccc', verso='dddd')
 
     def test_deck_update_page_return_302(self):
         response = self.client.get(reverse('deck_search'))
@@ -104,8 +83,8 @@ class DeckSearchTestCase(TestCase):
         self.client.login(username='testuser', password='12345')
         response = self.client.get(reverse('deck_search'))
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['deck'], ['<Deck: test>', '<Deck: aaaa>'])
-        self.assertQuerysetEqual(response.context['quick_deck'], ['<QuickDeck: test>'])
+        self.assertQuerysetEqual(response.context['deck'], ['<Deck: test>', '<Deck: other>'])
+        self.assertQuerysetEqual(response.context['quick_deck'], ['<QuickDeck: test>', '<QuickDeck: test>'])
 
     def test_copy_deck(self):
         old_deck = Deck.objects.count()
@@ -117,13 +96,10 @@ class DeckSearchTestCase(TestCase):
 
 class CustomizeDeckTestCase(TestCase):
     def setUp(self):
-        user = create_testing_user()
-        category = Category.objects.create(name="test", slug="test")
-        self.deck = Deck.objects.create(name="test", user=user, category=category)
+        self.deck, _ = create_deck()
 
         self.deck_image = DeckImage.objects.create(name="test image")
         path_file = os.path.join(os.getcwd(), "memory_app/tests/image_test.jpg")
-
         self.deck_image.image = SimpleUploadedFile(name='image_test.jpg', content=open(path_file, 'rb').read(),
                                                    content_type='image/jpeg')
         self.deck_image.save()
@@ -165,13 +141,7 @@ class CustomizeDeckTestCase(TestCase):
 class MemoryTestCase(TestCase):
     @freeze_time("2020-07-25")
     def setUp(self):
-        user = create_testing_user()
-        category = Category.objects.create(name="test", slug="test")
-
-        self.deck = Deck.objects.create(name="test", user=user, category=category)
-        card = Cards.objects.create(recto="aaaa", verso="bbbb")
-        self.deck.cards.add(card)
-        self.state = CardsState.objects.create(deck=self.deck, cards=card, side=True)
+        self.deck, self.state = create_deck()
 
     def test_deck_update_page_return_302(self):
         response = self.client.get(reverse('memory', args={self.deck.id}))
@@ -232,13 +202,7 @@ class MemoryTestCase(TestCase):
 
 class QuickMemoryTestCase(TestCase):
     def setUp(self):
-        user = create_testing_user()
-        category = Category.objects.create(name="test", slug="test")
-
-        self.deck = QuickDeck.objects.create(name="test", user=user, category=category)
-        card = Cards.objects.create(recto="aaaa", verso="bbbb")
-        self.deck.cards.add(card)
-        self.state = CardsState.objects.create(deck=self.deck, cards=card, side=True)
+        self.deck, self.state = create_deck(quick=True)
 
     def test_deck_update_page_return_302(self):
         response = self.client.get(reverse('quickmode', args={self.deck.id}))
