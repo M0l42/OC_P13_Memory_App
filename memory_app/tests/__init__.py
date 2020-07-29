@@ -15,11 +15,11 @@ def create_deck(username='testuser', password='12345', name='test', recto='aaaa'
     deck = Deck.objects.create(name=name, user=user, category=category)
     quick_deck = QuickDeck.objects.create(name="test", user=user, category=category)
     card = Cards.objects.create(recto=recto, verso=verso)
+    quick_deck.cards.add(card)
+    quick_state = CardsState.objects.create(deck=quick_deck, cards=card, side=True)
+    deck.cards.add(card)
+    state = CardsState.objects.create(deck=deck, cards=card, side=True)
     if quick:
-        quick_deck.cards.add(card)
-        state = CardsState.objects.create(deck=quick_deck, cards=card, side=True)
-        return quick_deck, state
+        return quick_deck, quick_state
     else:
-        deck.cards.add(card)
-        state = CardsState.objects.create(deck=deck, cards=card, side=True)
         return deck, state
