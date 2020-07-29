@@ -61,7 +61,7 @@ def sort_deck(context, pack_of_deck, available=None):
 
     :param context:
     :param pack_of_deck:
-    :param available
+    :param available:
     """
 
     context['deck'] = []
