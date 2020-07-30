@@ -22,7 +22,7 @@
                 <div class="maincontainer card mx-auto mb-4">
                     <div class="thecard">
                         {% if deck.image %}
-                            <div class="thefront card-body" style="background-image: url('{% get_static_prefix %}img/deck/{{ deck.get_image_name}}')">
+                            <div class="thefront card-body" style="background-image: url('/{{ object.image.image }}')">
                         {% else %}
                             <div class="thefront card-body" style="background: {{ deck.color }}">
                         {% endif %}
@@ -30,7 +30,7 @@
                         </div>
 
                         {% if deck.image %}
-                            <div class="theback card-body" style="background-image: url('{% get_static_prefix %}img/deck/{{ deck.get_image_name}}')">
+                            <div class="theback card-body" style="background-image: url('/{{ object.image.image }}')">
                         {% else %}
                             <div class="theback card-body" style="background: {{ deck.color }}">
                         {% endif %}

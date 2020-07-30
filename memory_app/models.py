@@ -33,23 +33,9 @@ class Cards(models.Model):
         return self.recto + " - " + self.verso
 
 
-def photo_path(instance, filename):
-    """
-    Create a path to save the image.
-
-    :param instance:
-    :param filename:
-    :return:
-        path to the file
-    """
-    base_filename, file_extension = os.path.splitext(filename)
-    return 'memory_app/static/img/deck/{basename}{file_extension}'.format(
-        basename=base_filename, file_extension=file_extension)
-
-
 class DeckImage(models.Model):
     name = models.CharField(verbose_name='name', max_length=200)
-    image = models.ImageField(upload_to=photo_path)
+    image = models.ImageField(upload_to='media/')
 
     def __str__(self):
         return self.name
@@ -83,9 +69,6 @@ class Deck(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_image_name(self):
-        return os.path.basename(self.image.image.name)
 
     def get_card(self):
         """

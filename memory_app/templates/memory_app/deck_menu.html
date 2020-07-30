@@ -17,7 +17,7 @@
                     <div class="maincontainer card mx-auto my-3">
                         <div class="thecard">
                             {% if object.image %}
-                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}')">
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('/{{ object.image.image }}')">
                             {% else %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}">
                             {% endif %}
@@ -57,7 +57,7 @@
                     <div class="maincontainer card mx-auto my-3">
                         <div class="thecard">
                             {% if object.image %}
-                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}'); filter: grayscale(100%)">
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('/{{ object.image.image }}'); filter: grayscale(100%)">
                             {% else %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}; filter: grayscale(100%)">
                             {% endif %}
@@ -99,7 +99,7 @@
                     <div class="maincontainer card mx-auto my-3">
                         <div class="thecard">
                             {% if object.image %}
-                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}')">
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('/{{ object.image.image }}')">
                             {% else %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}">
                             {% endif %}
@@ -140,11 +140,12 @@
                     <div class="maincontainer card mx-auto my-3">
                         <div class="thecard">
                             {% if object.image %}
-                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('{% get_static_prefix %}img/deck/{{ object.get_image_name}}'); filter: grayscale(100%)">
+                                <div class="thefront card-body" id="{{ object.pk }}" style="background-image: url('/{{ object.image.image }}'); filter: grayscale(100%)">
                             {% else %}
                                 <div class="thefront card-body" id="{{ object.pk }}" style="background: {{ object.color }}; filter: grayscale(100%)">
                             {% endif %}
                                 <h3 class="card-title">{{object.name}}</h3>
+                                <p>{{ object.image }}</p>
                                 <p>Aucune carte disponnible Aujourd'hui</p>
                             </div>
                         </div>

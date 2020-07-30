@@ -410,6 +410,7 @@ def customize_deck(requests, *args, **kwargs):
             data = dict()
             try:
                 image = DeckImage.objects.get(pk=requests.GET.get('image'))
+                print(image.image.url)
                 data['image'] = os.path.basename(image.image.name)
             except ValueError:
                 pass

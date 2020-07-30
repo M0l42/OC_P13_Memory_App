@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='name')),
-                ('image', models.ImageField(upload_to=memory_app.models.photo_path)),
+                ('image', models.ImageField(upload_to='media/')),
             ],
         ),
         migrations.CreateModel(
