@@ -105,7 +105,7 @@ class CustomizeDeckTestCase(TestCase):
         self.deck_image.save()
 
     def delete_image(self):
-        path_dir_img = os.path.join(os.path.join(os.getcwd(), "memory_app/static/img/deck"))
+        path_dir_img = os.path.join(os.path.join(os.getcwd(), "media/"))
         path_file = os.path.join(path_dir_img, "image_test.jpg")
         os.remove(path_file)
 
